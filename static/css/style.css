@@ -2,7 +2,8 @@
    Design System — Notion/Obsidian-inspired, near-monochrome
    Light: white paper, #37352f ink, hairline #e9e9e7 borders.
    Dark: #1e1e1e page, #202020 panels, #d4d4d4 text.
-   One restrained accent (#2383e2 light / #529cca dark), used sparingly.
+   One restrained accent — muted chili red — used sparingly: link
+   hovers, the active nav item, and the "View all posts" link.
    ================================================================== */
 
 /* ---- Theme tokens ---- */
@@ -14,8 +15,9 @@
     --text-muted: #787774;
     --border: #e9e9e7;
     --border-strong: #d3d1cb;
-    --accent: #2383e2;
-    --accent-hover: #1a6fc4;
+    /* Muted chili red, 5.7:1 on white (AA for normal text). */
+    --accent: #b3402a;
+    --accent-hover: #8f3220;
 
     --code-bg: #f7f6f3;
     --code-border: #e9e9e7;
@@ -25,7 +27,21 @@
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono",
         Menlo, Consolas, monospace;
 
+    /* ONE container: header, hero, post list, sidebar and footer all
+       share the same left/right edges on every page. */
+    --container: 1120px;
     --max-width: 700px;
+
+    /* 8px spacing scale (structural layout; 4px half-step for micro gaps). */
+    --space-05: 4px;
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+    --space-8: 64px;
+
     --radius: 6px;
     --header-height: 60px;
 }
@@ -37,11 +53,19 @@
     --text-muted: #9b9b9b;
     --border: #2f2f2f;
     --border-strong: #454545;
-    --accent: #529cca;
-    --accent-hover: #6db3dd;
+    /* Lighter chili tone for dark surfaces, 6.6:1 on #1e1e1e (AA). */
+    --accent: #eb8a63;
+    --accent-hover: #f5a786;
 
     --code-bg: #202020;
     --code-border: #333333;
+}
+
+/* ---- Focus: always visible for keyboard users ---- */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 
 /* ---- Reset ---- */
@@ -73,15 +97,18 @@ body {
     flex-direction: column;
 }
 
+/* Links sit in the ink color with a soft underline; the chili-red
+   accent appears on hover (and on the active nav item / View-all link). */
 a {
-    color: var(--accent);
+    color: var(--text);
     text-decoration: underline;
-    text-decoration-color: transparent;
+    text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
     text-underline-offset: 3px;
     transition: text-decoration-color 0.15s ease, color 0.15s ease;
 }
 
 a:hover {
+    color: var(--accent);
     text-decoration-color: currentColor;
 }
 
@@ -139,14 +166,15 @@ h6 {
 }
 
 .header-inner {
-    max-width: 1020px;
+    /* Same container as .site-main and .footer-inner — shared edges. */
+    max-width: var(--container);
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 var(--space-3);
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: var(--space-3);
 }
 
 .site-logo {
@@ -200,6 +228,7 @@ h6 {
     font-weight: 600;
     text-decoration: none;
     color: var(--text-muted);
+    padding: var(--space-1) 0;
     transition: color 0.15s ease;
     white-space: nowrap;
 }
@@ -208,20 +237,26 @@ h6 {
     color: var(--text);
 }
 
+/* Current page, set by the small script in base.html. */
+.site-nav a.nav-active {
+    color: var(--accent);
+}
+
 /* ---- Theme toggle ---- */
 
 .theme-toggle {
     background: none;
     border: none;
-    border-radius: 4px;
-    width: 30px;
-    height: 30px;
+    border-radius: var(--radius);
+    /* Comfortable click target (≥40px) with a visible hover state. */
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 1rem;
     transition: background 0.15s ease, color 0.15s ease;
     flex-shrink: 0;
 }
@@ -266,25 +301,20 @@ h6 {
 .site-main {
     flex: 1;
     width: 100%;
-    max-width: var(--max-width);
+    /* ONE container everywhere: same left/right edges as the header
+       and footer (bookends). Post/docs pages keep a capped reading
+       measure on their prose via .post-content / .docs-content. */
+    max-width: var(--container);
     margin: 0 auto;
-    padding: 2.5rem 1.5rem 3rem;
-}
-
-/* Wider main area for post pages to accommodate the ToC */
-.site-main.post-wide {
-    max-width: 980px;
-}
-
-/* Expand max-width for docs to accommodate the sidebar */
-.site-main.docs-wide {
-    max-width: 920px;
+    padding: var(--space-5) var(--space-3) var(--space-6);
 }
 
 /* ==================================================================
    Right-hand categories sidebar (desktop only)
-   Home + blog listing get a wider main area (matching the 1020px
-   header) split into content column + 220px sidebar. Post pages keep
+   Home + blog listing split the shared container into a two-column
+   grid: main ~2/3, sidebar ~1/3, consistent 64px gap. The hero on the
+   home page spans the full row above the grid, so the Categories
+   heading top-aligns with the "Latest Posts" heading. Post pages keep
    their own ToC layout and never include the sidebar.
    ================================================================== */
 
@@ -299,19 +329,25 @@ h6 {
     min-width: 0;
 }
 
-@media (min-width: 1080px) {
+@media (min-width: 1024px) {
     .site-main.with-sidebar {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 220px;
-        column-gap: 4rem;
+        /* main ≈ 2/3 (688px), sidebar ≈ 1/3 (300px) of the 1072px content. */
+        grid-template-columns: minmax(0, 2fr) 300px;
+        column-gap: var(--space-8);
         align-items: start;
-        max-width: 1020px;
+        max-width: var(--container);
+    }
+
+    /* Hero spans the full container width, above the two columns. */
+    .bio {
+        grid-column: 1 / -1;
     }
 
     .categories-sidebar {
         display: block;
         position: sticky;
-        top: calc(var(--header-height) + 2.5rem);
+        top: calc(var(--header-height) + var(--space-5));
         align-self: start;
     }
 }
@@ -322,18 +358,18 @@ h6 {
     padding-left: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: var(--space-05);
 }
 
 .category-link {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: var(--space-1);
     font-size: 0.9rem;
     text-decoration: none;
     color: var(--text-muted);
-    padding: 0.3rem 0.5rem;
+    padding: var(--space-05) var(--space-1);
     border-radius: 4px;
     transition: color 0.15s ease, background 0.15s ease;
 }
@@ -350,13 +386,27 @@ h6 {
     background: color-mix(in srgb, var(--accent) 8%, var(--bg));
 }
 
+/* Zero-count categories: dimmed, no hover emphasis, still crawlable. */
+.category-link.is-empty {
+    opacity: 0.55;
+}
+
+.category-link.is-empty:hover {
+    color: var(--text-muted);
+    background: transparent;
+}
+
 .category-count {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 0 0.5em;
+    /* Uniform badge width so counts right-align in one column. */
+    min-width: 1.75em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
     line-height: 1.5;
     flex-shrink: 0;
 }
@@ -372,16 +422,19 @@ h6 {
 
 .site-footer {
     border-top: 1px solid var(--border);
-    padding: 1.25rem 1.5rem;
+    padding: var(--space-3) 0;
 }
 
 .footer-inner {
-    max-width: 1020px;
+    /* Same container + padding as .header-inner and .site-main:
+       copyright and social links line up with the content edges. */
+    max-width: var(--container);
     margin: 0 auto;
+    padding: 0 var(--space-3);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-2);
     color: var(--text-muted);
     font-size: 0.85rem;
 }
@@ -392,13 +445,14 @@ h6 {
 
 .footer-links {
     display: flex;
-    gap: 1.25rem;
+    gap: var(--space-3);
 }
 
 .footer-links a {
     color: var(--text-muted);
     text-decoration: none;
     font-size: 0.85rem;
+    padding: var(--space-1) 0;
 }
 
 .footer-links a:hover {
@@ -409,7 +463,7 @@ h6 {
 @media (max-width: 640px) {
     .footer-inner {
         flex-direction: column;
-        gap: 0.75rem;
+        gap: var(--space-1);
         text-align: center;
     }
 }
@@ -491,16 +545,19 @@ h6 {
 
 
 /* ==================================================================
-   Home — bio + latest posts (single column)
+   Home — hero + latest posts
+   On desktop the hero spans the full container width (a grid row
+   above the two-column area); the avatar is vertically centered with
+   the text block and the tagline uses the full column width.
    ================================================================== */
 
 .bio {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.25rem;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
     border-bottom: 1px solid var(--border);
 }
 
@@ -522,14 +579,14 @@ h6 {
 .bio-name {
     font-size: 1.5rem;
     letter-spacing: -0.01em;
-    margin-bottom: 0.2rem;
+    margin-bottom: var(--space-05);
 }
 
+/* No max-width: the tagline wraps naturally across the full column. */
 .bio-text {
     color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.55;
-    max-width: 460px;
 }
 
 @media (max-width: 640px) {
@@ -537,32 +594,52 @@ h6 {
         flex-direction: column;
         text-align: center;
     }
-
-    .bio-text {
-        max-width: 100%;
-    }
 }
 
+/* ---- Section labels: one consistent size/weight/case everywhere ---- */
 
-.section-heading {
-    font-size: 0.85rem;
+.section-heading,
+.sidebar-title {
+    font-size: 0.8rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--text-muted);
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-2);
 }
 
 .view-all-link {
     display: inline-block;
-    margin-top: 1rem;
+    margin-top: var(--space-3);
     font-size: 0.9rem;
     font-weight: 500;
+    /* One of the three sanctioned accent uses. */
+    color: var(--accent);
+    text-decoration: none;
 }
+
+.view-all-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* ---- Post row meta: date + tags share one consistent baseline ---- */
 
 .post-card-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+}
+
+.post-card-date {
+    /* Fixed width so dates, tags, titles and excerpts line up
+       identically in every row. */
+    min-width: 9em;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
 }
 
 
@@ -571,29 +648,29 @@ h6 {
    ================================================================== */
 
 .blog-list h1 {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-3);
 }
 
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
     border-bottom: 1px solid var(--border);
 }
 
 .filter-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-05);
     font-size: 0.85rem;
     font-weight: 500;
     text-decoration: none;
     color: var(--text-muted);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 0.25rem 0.7rem;
+    padding: var(--space-05) 10px;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
@@ -624,12 +701,21 @@ h6 {
     position: relative;
     text-decoration: none;
     color: var(--text);
-    padding: 1rem 0;
+    /* Bleed the row slightly past the text edges so the hover tint
+       reads as a full row (Notion-style), while text stays aligned. */
+    padding: var(--space-2) var(--space-3);
+    margin: 0 calc(-1 * var(--space-3));
     border-bottom: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: background 0.15s ease;
 }
 
 .post-card:hover {
-    opacity: 0.85;
+    background: var(--bg-secondary);
+}
+
+.post-card:hover .post-card-title {
+    color: var(--accent);
 }
 
 .post-card-link {
@@ -654,21 +740,15 @@ h6 {
 .post-card-title {
     font-size: 1.05rem;
     font-weight: 600;
-    margin: 0 0 0.25rem;
+    margin: 0 0 var(--space-05);
     line-height: 1.4;
-}
-
-.post-card-date {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 0.25rem;
+    transition: color 0.15s ease;
 }
 
 .post-card-summary {
     color: var(--text-muted);
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-1);
     line-height: 1.55;
 }
 
@@ -676,31 +756,37 @@ h6 {
     display: none;
 }
 
-/* ---- Tags ---- */
+/* ---- Tag pills: one small, neutral style everywhere ---- */
 
-.tag {
-    display: inline-block;
+.post-card-tags,
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
     position: relative;
     z-index: 2;
-    font-size: 0.75rem;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.72rem;
     font-weight: 500;
+    line-height: 1.5;
     color: var(--text-muted);
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.1em 0.45em;
-    margin-right: 0.35rem;
+    border-radius: var(--radius);
+    padding: 1px var(--space-1);
     text-decoration: none;
+    white-space: nowrap;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
 
+/* Neutral hover — pills never compete with titles for attention. */
 a.tag:hover {
-    color: var(--accent);
+    color: var(--text);
     border-color: var(--border-strong);
-}
-
-.post-tags {
-    margin-top: 0.75rem;
 }
 
 
@@ -711,7 +797,7 @@ a.tag:hover {
 .post-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 3rem;
+    gap: var(--space-6);
     align-items: start;
 }
 
@@ -723,10 +809,13 @@ a.tag:hover {
     #toc-container {
         display: none;
     }
+}
 
-    .site-main.post-wide {
-        max-width: var(--max-width);
-    }
+/* Capped reading measure inside the shared container (ToC sits to the
+   right of it). */
+.post-content {
+    max-width: var(--max-width);
+    min-width: 0;
 }
 
 #toc-container {
@@ -792,21 +881,22 @@ h4:hover .header-anchor {
 }
 
 .post-header {
-    margin-bottom: 2.25rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-3);
     border-bottom: 1px solid var(--border);
+    max-width: var(--max-width);
 }
 
 .post-header time {
     display: block;
     font-size: 0.85rem;
     color: var(--text-muted);
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--space-2);
 }
 
 .post-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
+    margin-top: var(--space-6);
+    padding-top: var(--space-3);
     border-top: 1px solid var(--border);
 }
 
@@ -907,35 +997,31 @@ h4:hover .header-anchor {
 
 .docs-layout {
     display: flex;
-    gap: 2.5rem;
+    gap: var(--space-5);
 }
 
 .docs-sidebar {
     flex-shrink: 0;
     width: 180px;
     position: sticky;
-    top: calc(var(--header-height) + 2rem);
+    top: calc(var(--header-height) + var(--space-4));
     align-self: flex-start;
 }
 
-.sidebar-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 0.75rem;
-}
+/* .sidebar-title shares the unified section-label style defined with
+   .section-heading above. */
 
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: var(--space-05);
 }
 
 .sidebar-link {
     font-size: 0.9rem;
     text-decoration: none;
     color: var(--text-muted);
-    padding: 0.3rem 0.5rem;
+    padding: var(--space-05) var(--space-1);
     border-radius: 4px;
     transition: color 0.15s ease, background 0.15s ease;
 }
@@ -955,10 +1041,13 @@ h4:hover .header-anchor {
 .docs-content {
     flex: 1;
     min-width: 0;
+    /* Capped reading measure inside the shared container. */
+    max-width: var(--max-width);
 }
 
-/* ---- Mobile: stack sidebar above content ---- */
-@media (max-width: 640px) {
+/* ---- Tablet: stack the docs sidebar above the content, matching the
+   ToC breakpoint on post pages ---- */
+@media (max-width: 900px) {
     .docs-layout {
         flex-direction: column;
     }
@@ -967,14 +1056,14 @@ h4:hover .header-anchor {
         position: static;
         width: 100%;
         border-bottom: 1px solid var(--border);
-        padding-bottom: 1rem;
-        margin-bottom: 1rem;
+        padding-bottom: var(--space-2);
+        margin-bottom: var(--space-2);
     }
 
     .sidebar-nav {
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: var(--space-1);
     }
 }
 

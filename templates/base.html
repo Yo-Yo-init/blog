@@ -14,7 +14,7 @@
     <meta property="og:type" content="website" />
 
     <!-- Styles (system font stack — no external font requests) -->
-    <link rel="stylesheet" href="/static/css/style.css?v=8" />
+    <link rel="stylesheet" href="/static/css/style.css?v=9" />
 
     <!-- Inline script to prevent flash of wrong theme -->
     <script>
@@ -62,6 +62,17 @@
     </footer>
 
     <script src="/static/js/theme.js"></script>
+    <script>
+        // Highlight the nav item for the current page.
+        (function () {
+            var path = window.location.pathname;
+            document.querySelectorAll(".site-nav a").forEach(function (a) {
+                var href = a.getAttribute("href");
+                var active = href === "/" ? path === "/" : path.indexOf(href) === 0;
+                if (active) a.classList.add("nav-active");
+            });
+        })();
+    </script>
 </body>
 
 </html>
