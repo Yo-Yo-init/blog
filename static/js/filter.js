@@ -49,7 +49,4 @@
         }
     }
 
-    // Keep the search box in sync with the current query.
-    var input = document.querySelector(".search-bar input[name='q']");
-    if (input && params.get("q")) input.value = params.get("q");
 })();

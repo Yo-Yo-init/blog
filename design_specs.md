@@ -1,43 +1,45 @@
 # Personal Blog & Documentation Site — Design Specifications
 
-> A modern, minimal personal blog and documentation website built with a Python backend. Content is authored in Markdown and rendered server-side into clean, typographic pages.
+> A minimal, Notion/Obsidian-inspired personal blog and documentation site. Content is authored in Markdown and rendered statically into clean, typographic pages. The design goal: neutral, quiet, content-first — like a well-organized notes app.
 
 ---
 
 ## 1. Design Language
 
-### Palette
+### Palette — near-monochrome, one restrained accent
 
-| Token                | Light Mode | Dark Mode  |
-| -------------------- | ---------- | ---------- |
-| `--bg`                | `#faf5ee`  | `#1c1712`  |
-| `--bg-secondary`      | `#f1e6d8`  | `#262019`  |
-| `--text`              | `#2b2420`  | `#f0e6d8`  |
-| `--text-muted`        | `#8a7a68`  | `#a8987f`  |
-| `--border`            | `#e4d5c1`  | `#3b3226`  |
-| `--accent` (terracotta) | `#b5502e`  | `#e08a5b`  |
-| `--accent-secondary` (sage) | `#6e7f5c`  | `#8fa379`  |
+| Token             | Light Mode   | Dark Mode   | Used for                          |
+| ----------------- | ------------ | ----------- | --------------------------------- |
+| `--bg`            | `#ffffff`    | `#1e1e1e`   | Page background                   |
+| `--bg-secondary`  | `#f7f7f5`    | `#202020`   | Panels, tags, hover fills         |
+| `--text`          | `#37352f`    | `#d4d4d4`   | Body ink (Notion-style)           |
+| `--text-muted`    | `#787774`    | `#9b9b9b`   | Dates, labels, secondary text     |
+| `--border`        | `#e9e9e7`    | `#2f2f2f`   | Hairline borders and dividers     |
+| `--border-strong` | `#d3d1cb`    | `#454545`   | Hover borders, blockquote rule    |
+| `--accent`        | `#2383e2`    | `#529cca`   | Links, active filter, progress bar |
+| `--accent-hover`  | `#1a6fc4`    | `#6db3dd`   | Accent hover state                |
 
-> Warm, earthy minimalism. A restrained two-color accent system — terracotta and sage — against warm neutral paper and ink tones. Color is used sparingly and consistently, never decoratively; the content is still the decoration.
+> Neutral light/dark pair modeled on Notion's light theme and Obsidian's dark theme. A single muted blue is the only accent color; it appears only on links, the active filter pill, the active docs-sidebar item, and the reading-progress bar. The former terracotta/sage multi-accent system and per-category colors are gone. Code blocks use neutral, GitHub-like syntax colors in both themes.
 
 ### Typography
 
-- **Headings**: `Inter` (sans-serif), weight 600–700.
-- **Body**: `Inter` or `system-ui`, weight 400, line-height 1.7.
-- **Code**: `JetBrains Mono` or `monospace`, slightly reduced size.
-- **Scale**: Modular scale with `clamp()` for fluid sizing.
+- **Everything**: system font stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, …`) — no external font requests (the Google Fonts / Inter + JetBrains Mono links were removed).
+- **Headings**: weight **600**, slightly tightened letter-spacing.
+- **Body**: weight 400, **line-height 1.6**.
+- **Code**: `ui-monospace` stack, slightly reduced size.
+- **Scale**: modest fixed sizes (h1 1.875rem → h4 1rem) instead of large fluid clamps.
 
 ### Spacing & Layout
 
-- Max content width: `680px` (prose-optimized).
-- Generous whitespace — `1.5rem` to `3rem` between sections.
-- Flat design: no shadows, no rounded corners larger than `4px`, no gradients.
-- Responsive: single-column, mobile-first.
+- Max content width: **700px** (prose-optimized); post pages widen to 980px for the table-of-contents column, docs pages to 920px for the sidebar.
+- Flat surfaces: **hairline 1px borders**, corner radius ≤ **6px**, **no box shadows**, no gradients.
+- Responsive: single-column on mobile, mobile-first.
 
 ### Interactions
 
-- Minimal transitions: opacity and color on links/buttons (`150ms ease`).
-- Dark/light mode toggle, preference saved to `localStorage`, respects `prefers-color-scheme` on first visit.
+- Minimal transitions: color/background changes (`150ms ease`). Link underlines appear on hover.
+- Dark/light toggle (header), preference saved to `localStorage`, respects `prefers-color-scheme` on first visit.
+- Reading-progress bar (accent) at the top of post pages.
 
 ---
 
@@ -45,34 +47,27 @@
 
 ### Core Framework
 
-| Tool                                                             | Purpose                          |
-| ---------------------------------------------------------------- | -------------------------------- |
-| [FastAPI](https://fastapi.tiangolo.com/)                         | Application server & routing     |
-| [Uvicorn](https://www.uvicorn.org/)                              | ASGI server (runs FastAPI)       |
-| [Jinja2](https://jinja.palletsprojects.com/)                     | HTML templating with inheritance |
+| Tool | Purpose |
+| ---- | ------- |
+| FastAPI (`app/`, dev server) | Application server & routing |
+| `build.py` (static generator) | Renders every route to `dist/` for Cloudflare Workers hosting |
+| [Jinja2](https://jinja.palletsprojects.com/) | HTML templating with inheritance |
 
 ### Content Pipeline
 
-| Library                                                                       | Purpose                                  |
-| ----------------------------------------------------------------------------- | ---------------------------------------- |
-| [python-frontmatter](https://python-frontmatter.readthedocs.io/)              | Parse YAML metadata from `.md` files     |
-| [mistune](https://mistune.readthedocs.io/) (v3)                               | Fast Markdown → HTML renderer            |
-| [Pygments](https://pygments.org/)                                             | Server-side syntax highlighting          |
+| Library | Purpose |
+| ------- | ------- |
+| [python-frontmatter](https://python-frontmatter.readthedocs.io/) | Parse YAML metadata from `.md` files |
+| [mistune](https://mistune.readthedocs.io/) (v3) | Fast Markdown → HTML renderer |
+| [Pygments](https://pygments.org/) | Server-side syntax highlighting |
 
 ### Frontend (Minimal)
 
-| Tool                                           | Purpose                                |
-| ---------------------------------------------- | -------------------------------------- |
-| Vanilla CSS (custom properties)                | Styling — no framework                 |
-| Vanilla JS (~20 lines)                         | Dark mode toggle + `localStorage`      |
-| [Google Fonts — Inter](https://fonts.google.com/specimen/Inter) | Typography                  |
-
-### Development
-
-| Tool             | Purpose                                 |
-| ---------------- | --------------------------------------- |
-| `venv`           | Python virtual environment              |
-| `watchfiles`     | Auto-reload during development          |
+| Tool | Purpose |
+| ---- | ------- |
+| Vanilla CSS (custom properties) | Styling — no framework |
+| Vanilla JS | Dark mode toggle + `localStorage`; client-side blog filtering (`filter.js`) |
+| System fonts | Typography — zero external font requests |
 
 ### `requirements.txt`
 
@@ -94,7 +89,7 @@ watchfiles>=1.0
 blog/
 ├── content/                    # All authored content lives here
 │   ├── blog/
-│   │   └── 2025-01-15-hello-world.md
+│   │   └── YYYY-MM-DD-slug.md
 │   └── docs/
 │       └── getting-started.md
 │
@@ -102,23 +97,26 @@ blog/
 │   ├── css/
 │   │   └── style.css           # Single stylesheet, CSS variables
 │   ├── js/
-│   │   └── theme.js            # Dark mode toggle (~20 lines)
+│   │   ├── theme.js            # Dark mode toggle
+│   │   └── filter.js           # Client-side ?q= / ?category= filtering
 │   └── images/
 │
 ├── templates/
-│   ├── base.html               # Shell: <head>, nav, footer
-│   ├── index.html              # Landing page
-│   ├── blog_list.html          # Blog index
-│   ├── blog_post.html          # Single post
-│   ├── doc_page.html           # Single doc page
-│   └── doc_sidebar.html        # Partial: sidebar nav for docs
+│   ├── base.html               # Shell: <head>, header nav, footer
+│   ├── index.html              # Landing page (bio + latest posts)
+│   ├── blog_list.html          # Blog index with filter pills
+│   ├── blog_post.html          # Single post with ToC sidebar
+│   ├── doc_page.html           # Doc page with sidebar nav
+│   ├── about.html              # About page
+│   └── 404.html                # Not-found page
 │
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPI app, routes, startup
 │   ├── content.py              # Markdown loading, parsing, caching
-│   └── config.py               # Site metadata & settings
+│   └── config.py               # Site metadata, categories, settings
 │
+├── build.py                    # Static build → dist/
 ├── requirements.txt
 └── design_specs.md             # ← This file
 ```
@@ -135,7 +133,8 @@ title: Hello World
 date: 2025-01-15
 summary: A short introduction to this blog.
 tags: [meta, welcome]
-draft: false
+category: homelab        # only categories that actually have posts
+draft: false             # true = excluded from the build
 ---
 
 Your content here. Standard Markdown with fenced code blocks.
@@ -143,46 +142,41 @@ Your content here. Standard Markdown with fenced code blocks.
 
 - **Sorting**: Blog posts ordered by `date` (newest first).
 - **Drafts**: Posts with `draft: true` are hidden in production.
-- **Slugs**: Derived from filename (e.g., `2025-01-15-hello-world.md` → `/blog/hello-world`).
+- **Slugs**: Derived from filename (`2025-01-15-hello-world.md` → `/blog/hello-world`).
 
 ---
 
 ## 5. Routes
 
-| Route                | View             | Description                    |
-| -------------------- | ---------------- | ------------------------------ |
-| `/`                  | `index.html`     | Landing — name, bio, links     |
-| `/blog`              | `blog_list.html` | Chronological post list        |
-| `/blog/{slug}`       | `blog_post.html` | Individual post                |
-| `/docs`              | `doc_page.html`  | Documentation index / overview |
-| `/docs/{slug}`       | `doc_page.html`  | Individual doc page            |
+| Route          | View             | Description                            |
+| -------------- | ---------------- | -------------------------------------- |
+| `/`            | `index.html`     | Landing — bio, latest posts            |
+| `/blog`        | `blog_list.html` | Chronological post list + filter pills |
+| `/blog/{slug}` | `blog_post.html` | Individual post with ToC               |
+| `/docs`        | `doc_page.html`  | Documentation index / overview         |
+| `/docs/{slug}` | `doc_page.html`  | Individual doc page                    |
+| `/about`       | `about.html`     | About page with social links           |
+| (404)          | `404.html`       | Not-found page                         |
+
+Search (`/blog?q=…`) and category filtering (`/blog?category=…`) are handled client-side by `static/js/filter.js`.
 
 ---
 
-## 6. Implementation Phases
+## 6. What Was Removed (and Why)
 
-### Phase 1 — Foundation
-1. Create `venv`, install dependencies.
-2. Build `app/main.py` with FastAPI: static file mounting, Jinja2 templates, basic routes.
-3. Build `app/content.py`: load Markdown files, parse frontmatter, render HTML with `mistune` + `Pygments`.
-
-### Phase 2 — Templates & Styling
-1. Create `base.html` with semantic HTML5 (`<header>`, `<main>`, `<footer>`).
-2. Write `style.css` using CSS custom properties for theming.
-3. Build out remaining templates: list view, post view, doc view with sidebar.
-
-### Phase 3 — Polish
-1. Dark mode toggle (`theme.js`), system preference detection.
-2. SEO: dynamic `<title>`, `<meta description>`, Open Graph tags.
-3. Performance: cache parsed Markdown on startup, add `Cache-Control` headers for static assets.
-4. Optional: RSS feed endpoint (`/feed.xml`).
-
----
+- **Header search bar + ⌘K hint** — it was a plain form link to `/blog`, not real search; the tag filter pills on `/blog` cover findability. The ⌘K handler in `theme.js` was removed with it.
+- **Homepage category tiles (bento grid)** — three of the four categories (`retro-gaming`, `certs`, `musings`) had zero posts and rendered as "Coming soon" placeholders. The homepage now goes straight from the bio to the latest-posts list; category filtering still works via `/blog?category=…`.
+- **"Recently added" strip** — duplicated the "Latest Posts" list directly below it.
+- **Homepage "Explore Topics" sidebar and "Connect" block** — tag filtering already lives on `/blog` as filter pills; social links already live on the About page and footer. The homepage is now a single centered column.
+- **Back-to-top floating button** — decorative floating control with a shadow; removed for the flat aesthetic (browser shortcuts and the sticky header cover navigation).
+- **Footer social icons (GitHub/LinkedIn/YouTube SVGs)** — replaced with quiet text links; the About page keeps the icon links.
+- **External font requests** — system font stack instead of Google Fonts.
+- **`templates/_icons.html`** — only used by the removed category tiles; deleted.
 
 ## 7. Design Principles (Summary)
 
-1. **Content over chrome** — no visual noise.
-2. **Black and white** — monochrome palette, no accent colors.
-3. **Fast** — server-rendered HTML, minimal JS, no framework bloat.
-4. **Portable** — content is plain Markdown, never locked into a platform.
+1. **Content over chrome** — no visual noise, no decorative color.
+2. **Near-monochrome** — neutral paper/ink tones, one restrained blue accent used sparingly.
+3. **Flat** — hairline borders, ≤6px radii, zero shadows.
+4. **Fast** — system fonts, server-rendered static HTML, minimal JS, no framework bloat.
 5. **Simple to maintain** — small codebase, few dependencies, easy to extend.
