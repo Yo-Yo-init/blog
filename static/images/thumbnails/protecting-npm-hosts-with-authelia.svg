@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#dotgrid)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+  <!-- NPM proxy box -->
+  <rect x="180" y="185" width="160" height="100" rx="14" stroke="#B5502E" stroke-width="10"/>
+  <path d="M 210 220 L 310 220 M 210 250 L 285 250" stroke="#B5502E" stroke-width="8"/>
+
+  <!-- flow from browser to NPM -->
+  <path d="M 90 235 L 165 235" stroke="#6E7F5C" stroke-width="10"/>
+  <path d="M 145 220 L 165 235 L 145 250" stroke="#6E7F5C" stroke-width="10"/>
+
+  <!-- flow NPM to service -->
+  <path d="M 355 235 L 430 235" stroke="#6E7F5C" stroke-width="10"/>
+  <path d="M 410 220 L 430 235 L 410 250" stroke="#6E7F5C" stroke-width="10"/>
+
+  <!-- service box -->
+  <rect x="450" y="185" width="140" height="100" rx="14" stroke="#6E7F5C" stroke-width="10"/>
+  <path d="M 480 220 L 560 220 M 480 250 L 535 250" stroke="#6E7F5C" stroke-width="8"/>
+
+  <!-- Authelia check bubble -->
+  <circle cx="560" cy="330" r="52" stroke="#B5502E" stroke-width="10"/>
+  <path d="M 538 330 L 554 348 L 586 312" stroke="#6E7F5C" stroke-width="10"/>
+  <path d="M 480 300 C 500 320 520 328 520 330" stroke="#B5502E" stroke-width="8" stroke-dasharray="2 16"/>
+
+  </g>
+</svg>
