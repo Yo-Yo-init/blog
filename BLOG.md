@@ -3,7 +3,7 @@
 This is the reference the Hermes blog agent follows. Keep it accurate when the site changes.
 
 ## Stack
-
+- **Live site:** https://pepperslab.habanada.com (previews: one URL per branch, shown in the Cloudflare build)
 - **Generator:** custom Python static build (`build.py`) using Jinja templates (`templates/`) and Markdown (`content/`).
 - **Hosting:** Cloudflare (Workers static assets). Cloudflare runs `pip install -r requirements.txt && python build.py` and serves `dist/`.
 - **Branches:** `main` = live site. Any other branch gets its own Cloudflare preview URL. Never push to `main`; open a pull request instead.
