@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-with-sidebar">
-
-    <div class="page-with-sidebar-main">
-        <!-- Bio -->
+<div class="main-col">
+    <!-- Bio -->
         <section class="bio">
             <div class="bio-avatar">
                 <img src="/static/images/avatar.png" alt="Pepper — a chili pepper with glasses" />
@@ -47,9 +45,7 @@
             <p class="empty-state">No posts yet — check back soon.</p>
             {% endif %}
         </section>
-    </div>
-
-    {% include "_categories_sidebar.html" %}
-
 </div>
+
+{% include "_categories_sidebar.html" %}
 {% endblock %}

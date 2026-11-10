@@ -293,6 +293,12 @@ h6 {
     display: none;
 }
 
+/* Content column inside the two-column grid (home + blog listing).
+   min-width:0 lets long words/URLs shrink instead of blowing out the track. */
+.main-col {
+    min-width: 0;
+}
+
 @media (min-width: 1080px) {
     .site-main.with-sidebar {
         display: grid;

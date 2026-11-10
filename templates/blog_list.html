@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-with-sidebar">
-
-    <div class="page-with-sidebar-main">
-        <section class="blog-list" data-blog-list>
+<div class="main-col">
+    <section class="blog-list" data-blog-list>
             <h1 data-list-heading data-default-heading="Blog">{% if active_category %}{{ active_category.name }}{% else %}Blog{% endif %}</h1>
 
             {% if topics %}
@@ -53,9 +51,7 @@
             </script>
         </section>
         <script src="/static/js/filter.js"></script>
-    </div>
-
-    {% include "_categories_sidebar.html" %}
-
 </div>
+
+{% include "_categories_sidebar.html" %}
 {% endblock %}
