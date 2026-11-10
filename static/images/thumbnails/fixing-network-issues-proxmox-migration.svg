@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#dotgrid)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+  <circle cx="300" cy="220" r="35" stroke="#B5502E" stroke-width="10"/>
+  <circle cx="500" cy="220" r="35" stroke="#B5502E" stroke-width="10"/>
+  <line x1="335" y1="220" x2="465" y2="220" stroke="#B5502E" stroke-width="8" stroke-dasharray="4 16"/>
+  <circle cx="480" cy="290" r="38" stroke="#6E7F5C" stroke-width="10" fill="none"/>
+  <path d="M 462 290 L 476 305 L 502 275" stroke="#6E7F5C" stroke-width="9"/>
+
+  </g>
+</svg>

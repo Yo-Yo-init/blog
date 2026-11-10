@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#dotgrid)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+  <ellipse cx="330" cy="175" rx="55" ry="18" stroke="#B5502E" stroke-width="10"/>
+  <path d="M 275 175 L 275 245" stroke="#B5502E" stroke-width="10"/>
+  <path d="M 385 175 L 385 245" stroke="#B5502E" stroke-width="10"/>
+  <ellipse cx="330" cy="245" rx="55" ry="18" stroke="#B5502E" stroke-width="10"/>
+  <path d="M 410 240 L 470 280" stroke="#6E7F5C" stroke-width="9"/>
+  <path d="M 450 280 L 470 280 L 470 260" stroke="#6E7F5C" stroke-width="9"/>
+  <ellipse cx="520" cy="300" rx="30" ry="11" stroke="#6E7F5C" stroke-width="9"/>
+  <path d="M 490 300 L 490 330" stroke="#6E7F5C" stroke-width="9"/>
+  <path d="M 550 300 L 550 330" stroke="#6E7F5C" stroke-width="9"/>
+  <ellipse cx="520" cy="330" rx="30" ry="11" stroke="#6E7F5C" stroke-width="9"/>
+
+  </g>
+</svg>

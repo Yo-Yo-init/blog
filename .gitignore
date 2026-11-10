@@ -1,0 +1,17 @@
+# Build output (Cloudflare builds this itself)
+dist/
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets
+.env
+.env.*

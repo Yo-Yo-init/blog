@@ -1,0 +1,10 @@
+// Cloudflare Workers static-assets config.
+// Build command (Cloudflare dashboard): pip install -r requirements.txt && python build.py
+{
+  "name": "blog",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
