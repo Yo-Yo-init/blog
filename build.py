@@ -113,10 +113,11 @@ def build() -> None:
 
     pages = [
         _write(env, "/", "index.html", page_title="Home", posts=posts[:5], recent=posts[:4],
-               categories=_categories_with_counts(), topics=_top_topics(), main_class="index-wide"),
+               categories=_categories_with_counts(), topics=_top_topics(), main_class="with-sidebar"),
         _write(env, "/about/", "about.html", page_title="About"),
         _write(env, "/blog/", "blog_list.html", page_title="Blog", posts=posts, search_query="",
-               topics=_top_topics(limit=None), active_category=None),
+               topics=_top_topics(limit=None), active_category=None,
+               categories=_categories_with_counts(), main_class="with-sidebar"),
     ]
     for post in posts:
         pages.append(_write(env, f"/blog/{post.slug}/", "blog_post.html", page_title=post.title,

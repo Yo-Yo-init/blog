@@ -38,6 +38,11 @@
         pill.classList.toggle("active", active);
     });
 
+    // Highlight the matching category in the right-hand sidebar.
+    document.querySelectorAll("[data-category-link]").forEach(function (link) {
+        link.classList.toggle("active", link.dataset.categoryLink === category);
+    });
+
     // Empty states.
     if (shown === 0 && cards.length > 0) {
         if (category && !q) {

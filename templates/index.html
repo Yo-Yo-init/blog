@@ -1,51 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="home">
+<div class="page-with-sidebar">
 
-    <!-- Bio -->
-    <section class="bio">
-        <div class="bio-avatar">
-            <img src="/static/images/avatar.png" alt="Pepper — a chili pepper with glasses" />
-        </div>
-        <div class="bio-info">
-            <h1 class="bio-name">{{ site_name }}</h1>
-            <p class="bio-text">
-                IT technician by day, homelab tinkerer by night.
-                Documenting the builds, the breaks, and everything in between. 🌶️
-            </p>
-        </div>
-    </section>
-
-    <!-- Latest posts -->
-    <section class="latest-posts">
-        <h2 class="section-heading">Latest Posts</h2>
-
-        {% if posts %}
-        {% for post in posts %}
-        <article class="post-card">
-            <div class="post-card-meta">
-                <time class="post-card-date" datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
-                {% if post.tags %}
-                <div class="post-card-tags">
-                    {% for tag in post.tags %}
-                    <a href="/blog?q={{ tag }}" class="tag">{{ tag }}</a>
-                    {% endfor %}
-                </div>
-                {% endif %}
+    <div class="page-with-sidebar-main">
+        <!-- Bio -->
+        <section class="bio">
+            <div class="bio-avatar">
+                <img src="/static/images/avatar.png" alt="Pepper — a chili pepper with glasses" />
             </div>
-            <h3 class="post-card-title"><a href="/blog/{{ post.slug }}" class="post-card-link">{{ post.title }}</a></h3>
-            {% if post.summary %}
-            <p class="post-card-summary">{{ post.summary }}</p>
-            {% endif %}
-        </article>
-        {% endfor %}
+            <div class="bio-info">
+                <h1 class="bio-name">{{ site_name }}</h1>
+                <p class="bio-text">
+                    IT technician by day, homelab tinkerer by night.
+                    Documenting the builds, the breaks, and everything in between. 🌶️
+                </p>
+            </div>
+        </section>
 
-        <a href="/blog" class="view-all-link">View all posts &rarr;</a>
-        {% else %}
-        <p class="empty-state">No posts yet — check back soon.</p>
-        {% endif %}
-    </section>
+        <!-- Latest posts -->
+        <section class="latest-posts">
+            <h2 class="section-heading">Latest Posts</h2>
+
+            {% if posts %}
+            {% for post in posts %}
+            <article class="post-card">
+                <div class="post-card-meta">
+                    <time class="post-card-date" datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
+                    {% if post.tags %}
+                    <div class="post-card-tags">
+                        {% for tag in post.tags %}
+                        <a href="/blog?q={{ tag }}" class="tag">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <h3 class="post-card-title"><a href="/blog/{{ post.slug }}" class="post-card-link">{{ post.title }}</a></h3>
+                {% if post.summary %}
+                <p class="post-card-summary">{{ post.summary }}</p>
+                {% endif %}
+            </article>
+            {% endfor %}
+
+            <a href="/blog" class="view-all-link">View all posts &rarr;</a>
+            {% else %}
+            <p class="empty-state">No posts yet — check back soon.</p>
+            {% endif %}
+        </section>
+    </div>
+
+    {% include "_categories_sidebar.html" %}
 
 </div>
 {% endblock %}
