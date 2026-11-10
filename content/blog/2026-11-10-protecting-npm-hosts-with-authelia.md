@@ -10,7 +10,7 @@ draft: false
 
 I run [Nginx Proxy Manager](https://nginxproxymanager.com/) (NPM) as the front door for most of my self-hosted services, and I want a single login gate in front of all of them. That's what [Authelia](https://www.authelia.com/) gives me: an authentication middleware that sits between the internet and things like Sonarr, Portainer, or Nextcloud. Before anyone reaches a protected app, they have to pass Authelia first.
 
-I wrote earlier about setting up Authelia itself — generating secrets, the users database, `configuration.yml`. This post is the other half: the **NPM side**. How to mount a small folder of reusable nginx "snippets" into NPM, and how to protect any proxy host by pasting one short block into its Advanced tab. Once the snippets are in place, protecting a new service takes about two minutes.
+I wrote [earlier about setting up Authelia itself](/blog/integrating-authelia-with-nginx-proxy-manager) — generating secrets, the users database, `configuration.yml`. This post is the other half: the **NPM side**. How to mount a small folder of reusable nginx "snippets" into NPM, and how to protect any proxy host by pasting one short block into its Advanced tab. Once the snippets are in place, protecting a new service takes about two minutes.
 
 ## 1. The big picture
 
@@ -52,8 +52,6 @@ Use whatever path fits your setup — the name `snippets` is the only part that 
 Edit NPM's `docker-compose.yml` so it gets the snippets volume and joins a network that Authelia can also reach. If your Authelia container is already on a shared network (I call mine `npm_network`), just attach NPM to it:
 
 ```yaml
-version: '3.8'
-
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -104,7 +102,6 @@ location /internal/authelia/authz {
     proxy_set_header X-Forwarded-Host $http_host;
     proxy_set_header X-Forwarded-Uri $request_uri;
     proxy_set_header X-Forwarded-For $remote_addr;
-    proxy_set_header Content-Length "";
     proxy_set_header Connection "";
 }
 ```
@@ -113,11 +110,10 @@ The `internal;` directive means this location can't be reached directly from the
 
 ### `authelia-authrequest.conf`
 
-This is the actual gate: it runs the auth check and passes the authenticated user's details (name, groups, email) along to the backend service.
+This is the actual gate: it runs the auth check and passes the authenticated user's details (name, groups, email) along to the backend service. The last two lines are Authelia's modern redirect: when the auth check returns 401, nginx follows the Location header Authelia sends (its login portal) instead of a hard-coded URL, so the redirect always matches your configured Authelia domain.
 
 ```nginx
 auth_request /internal/authelia/authz;
-auth_request_set $target_url $scheme://$http_host$request_uri;
 auth_request_set $user $upstream_http_remote_user;
 auth_request_set $groups $upstream_http_remote_groups;
 auth_request_set $name $upstream_http_remote_name;
@@ -126,6 +122,8 @@ proxy_set_header Remote-User $user;
 proxy_set_header Remote-Groups $groups;
 proxy_set_header Remote-Name $name;
 proxy_set_header Remote-Email $email;
+auth_request_set $redirection_url $upstream_http_location;
+error_page 401 =302 $redirection_url;
 ```
 
 ### `proxy.conf`
@@ -200,4 +198,3 @@ Before you call it done, verify:
 - [ ] A protected host redirects to the Authelia login when not signed in, and lands back on the app after login
 - [ ] The protected app still works normally: correct client IPs in its logs, websockets stay connected
 - [ ] The Authelia portal host itself has an empty Advanced tab
-- [ ] Screenshot the Advanced tab block and the login redirect for the post
