@@ -128,7 +128,7 @@ async def index(request: Request):
         recent=get_posts()[:4],
         categories=_categories_with_counts(),
         topics=_top_topics(),
-        main_class="index-wide",
+        main_class="with-sidebar",
     ))
 
 
@@ -161,6 +161,8 @@ async def blog_list(request: Request, q: str = "", category: str = ""):
         search_query=q,
         topics=_top_topics(limit=None),
         active_category=active_category,
+        categories=_categories_with_counts(),
+        main_class="with-sidebar",
     ))
 
 

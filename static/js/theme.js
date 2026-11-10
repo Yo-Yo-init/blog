@@ -12,13 +12,4 @@
         root.setAttribute("data-theme", next);
         localStorage.setItem("theme", next);
     });
-
-    // ⌘K to focus search
-    document.addEventListener("keydown", function (e) {
-        if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-            e.preventDefault();
-            var input = document.querySelector(".search-bar input");
-            if (input) input.focus();
-        }
-    });
 })();

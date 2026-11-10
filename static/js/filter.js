@@ -38,6 +38,11 @@
         pill.classList.toggle("active", active);
     });
 
+    // Highlight the matching category in the right-hand sidebar.
+    document.querySelectorAll("[data-category-link]").forEach(function (link) {
+        link.classList.toggle("active", link.dataset.categoryLink === category);
+    });
+
     // Empty states.
     if (shown === 0 && cards.length > 0) {
         if (category && !q) {
@@ -49,7 +54,4 @@
         }
     }
 
-    // Keep the search box in sync with the current query.
-    var input = document.querySelector(".search-bar input[name='q']");
-    if (input && params.get("q")) input.value = params.get("q");
 })();

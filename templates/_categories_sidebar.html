@@ -1,0 +1,15 @@
+<aside class="categories-sidebar" aria-label="Categories">
+    <h2 class="sidebar-title">Categories</h2>
+    <ul class="categories-list">
+        {% for cat in categories %}
+        <li>
+            <a href="/blog?category={{ cat.slug }}"
+               class="category-link {% if active_category is defined and active_category and active_category.slug == cat.slug %}active{% endif %}{% if cat.count == 0 %} is-empty{% endif %}"
+               data-category-link="{{ cat.slug }}">
+                <span class="category-name">{{ cat.name }}</span>
+                <span class="category-count">{{ cat.count }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</aside>
