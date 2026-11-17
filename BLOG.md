@@ -26,7 +26,7 @@ date: 2025-02-19
 summary: "One or two sentences shown on cards and in search results."
 tags: [networking, netbird, dns, vpn]
 image: /static/images/thumbnails/configuring-split-dns-on-netbird.svg
-category: homelab        # homelab | retro-gaming | certs | musings
+category: homelab        # homelab | ai | networking
 draft: false             # true = excluded from the build
 ---
 ```

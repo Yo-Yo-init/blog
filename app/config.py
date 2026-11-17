@@ -11,16 +11,15 @@ DOCS_DIR = "content/docs"
 STATIC_DIR = "static"
 TEMPLATES_DIR = "templates"
 
-# Top-level content pillars shown as tiles on the homepage. Order here is
-# display order — homelab first since it's the deepest category today.
+# Top-level content categories (sidebar + /blog?category=<slug>). Order here is
+# display order. Only list categories that have posts; add one here when the
+# first post for it exists.
 # 'icon' refers to an id handled in templates/_icons.html.
 CATEGORIES = [
     {"slug": "homelab", "name": "Homelab", "icon": "server",
-     "desc": "Proxmox, networking, and self-hosted services"},
-    {"slug": "retro-gaming", "name": "Retro gaming", "icon": "gamepad",
-     "desc": "Old hardware, emulation, and restorations"},
-    {"slug": "certs", "name": "Certs & study notes", "icon": "certificate",
-     "desc": "Study logs and exam notes"},
-    {"slug": "musings", "name": "Musings", "icon": "feather",
-     "desc": "Everything that doesn't fit elsewhere"},
+     "desc": "Builds, storage, and Proxmox hosts"},
+    {"slug": "ai", "name": "AI & agents", "icon": "server",
+     "desc": "Hermes agents, model choices, and running them for real"},
+    {"slug": "networking", "name": "Networking & security", "icon": "server",
+     "desc": "DNS, VPNs, reverse proxies, and locking things down"},
 ]

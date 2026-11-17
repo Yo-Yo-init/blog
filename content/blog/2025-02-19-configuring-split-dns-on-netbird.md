@@ -4,7 +4,7 @@ date: 2025-02-19
 summary: "A step-by-step guide to configuring Split DNS on Netbird so your local domains resolve correctly over a VPN tunnel."
 tags: [networking, netbird, dns, vpn]
 image: /static/images/thumbnails/configuring-split-dns-on-netbird.svg
-category: homelab
+category: networking
 draft: false
 ---
 
