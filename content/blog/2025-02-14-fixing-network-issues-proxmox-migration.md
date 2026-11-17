@@ -4,7 +4,7 @@ date: 2025-02-14
 summary: "When you move a Proxmox boot drive to new hardware, the network interface names change and the bridge breaks. Here's how to fix it."
 tags: [proxmox, networking, troubleshooting]
 image: /static/images/thumbnails/fixing-network-issues-proxmox-migration.svg
-category: homelab
+category: networking
 draft: false
 ---
 

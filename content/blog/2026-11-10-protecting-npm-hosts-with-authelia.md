@@ -4,7 +4,7 @@ date: 2026-11-10
 summary: "A focused, snippet-based walkthrough for putting Authelia in front of services proxied by Nginx Proxy Manager — mount a snippets folder, paste one block per host, done."
 tags: [self-hosted, authelia, nginx, docker, security]
 image: /static/images/thumbnails/protecting-npm-hosts-with-authelia.svg
-category: homelab
+category: networking
 draft: false
 ---
 

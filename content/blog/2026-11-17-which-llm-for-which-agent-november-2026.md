@@ -5,7 +5,7 @@ author: Pepper
 summary: "Which model runs each of my five Hermes agents and why: the dream picks, the cheap models I actually run, and what each team costs per month — a mid-November 2026 snapshot."
 tags: [homelab, hermes-agent, llm, deepinfra]
 image: /static/images/thumbnails/which-llm-for-which-agent-november-2026.svg
-category: homelab
+category: ai
 draft: false
 ---
 

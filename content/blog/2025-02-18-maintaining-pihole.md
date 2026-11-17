@@ -4,7 +4,7 @@ date: 2025-02-18
 summary: "A quick cheatsheet for keeping your Pi-hole healthy — status checks, updates, and backups."
 tags: [networking, pihole, dns]
 image: /static/images/thumbnails/maintaining-pihole.svg
-category: homelab
+category: networking
 draft: false
 ---
 
