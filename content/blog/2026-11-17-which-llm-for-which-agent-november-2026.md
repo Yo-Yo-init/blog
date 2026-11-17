@@ -58,7 +58,7 @@ If I had another $20 a month to spend, it would go to Homelab first (Sonnet or O
 
 ## Wiring it up
 
-The thing that tripped me up: by default Hermes sends every subagent to the same model, set by one global `delegation.model` ([GitHub #15789](https://github.com/NousResearch/hermes-agent/issues/15789)). To give each agent its own model, make each one a [profile](https://hermes-agent.nousresearch.com/docs/user-guide/profiles) with its own `config.yaml`. Then add a small delegation plugin that routes tasks to profiles. Hermes doesn't include one, but [the developer docs have a ~20-line example](https://hermes-agent.nousresearch.com/docs/developer-guide/delegation-provider-plugin). DeepInfra is a [built-in provider](https://docs.deepinfra.com/integrations/hermes-agent), so all five agents run on one API key.
+The thing that tripped me up: by default Hermes sends every subagent to the same model, set by one global `delegation.model` ([GitHub #15789](https://github.com/NousResearch/hermes-agent/issues/15789)). To give each agent its own model, make each one a [profile](https://hermes-agent.nousresearch.com/docs/user-guide/profiles) with its own `config.yaml`. Then add a small delegation plugin that routes tasks to profiles. Hermes doesn't include one, but [the developer docs have a ~20-line example](https://hermes-agent.nousresearch.com/docs/developer-guide/delegation-provider-plugin). DeepInfra is a [built-in provider](https://docs.deepinfra.com/integrations/hermes-agent) (I wire mine through its OpenAI-compatible endpoint), so all five agents run on one API key.
 
 Two settings worth copying. DeepSeek V4.x has thinking turned off by default on DeepInfra ([Hermes docs](https://hermes-agent.nousresearch.com/docs/integrations/providers)), so turn it on. And point the auxiliary slots (compression, titles and so on) at something cheap, or they quietly run on your main model:
 
@@ -66,11 +66,14 @@ Two settings worth copying. DeepSeek V4.x has thinking turned off by default on 
 # ~/.hermes/profiles/homelab/config.yaml
 model:
   default: deepseek-ai/DeepSeek-V4.1-Flash-1017
-  provider: deepinfra
+  provider: custom
+  base_url: https://api.deepinfra.com/v1/openai
+  api_key: ${DEEPINFRA_API_KEY}
+  api_mode: chat_completions
 agent:
-  reasoning_effort: medium
+  reasoning_effort: high
 auxiliary:
-  compression: { provider: deepinfra, model: zai-org/GLM-5.3-Flash }
+  compression: { provider: custom, model: zai-org/GLM-5.3-Flash }
 ```
 
 ## Last thing
