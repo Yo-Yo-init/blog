@@ -45,7 +45,14 @@ class HighlightRenderer(mistune.HTMLRenderer):
 # Markdown parser instance
 # ---------------------------------------------------------------------------
 
-_md = mistune.create_markdown(renderer=HighlightRenderer())
+# GFM plugins: `table` is required for markdown tables to render as <table>
+# instead of raw pipes (mistune v3 keeps tables behind a plugin). `strikethrough`
+# and `task_lists` match GitHub-flavored formatting. `url` autolinking is left
+# off on purpose so existing links/text are not rewritten.
+_md = mistune.create_markdown(
+    renderer=HighlightRenderer(),
+    plugins=["table", "strikethrough", "task_lists"],
+)
 
 
 # ---------------------------------------------------------------------------
