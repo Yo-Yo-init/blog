@@ -42,7 +42,7 @@ DIST = ROOT / "dist"
 
 # Optional: set to the live address (e.g. "https://blog.example.com") to get a
 # sitemap.xml with absolute URLs. Leave empty to skip the sitemap.
-SITE_URL = "https://pepperslab.habanada.com"
+SITE_URL = "https://chililab.dev"
 
 # Same display helpers as app/main.py, duplicated here so the build does not
 # need FastAPI installed.
