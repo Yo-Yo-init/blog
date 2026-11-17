@@ -11,7 +11,7 @@ draft: false
 
 # Running My Orchestrator on a Claude Pro Subscription
 
-Yesterday I wrote about which model runs which of the five agents in my [Hermes team](/blog/which-llm-for-which-agent-november-2026). The orchestrator runs Xiaomi's MiMo-V2.6-Pro on DeepInfra, and I mentioned that if money were no object I would put Claude Sonnet 5.5 there. Money is an object, but I also pay for a Claude Pro subscription every month and mostly use it in a browser tab. So this morning I asked a rude question: can the subscription pay for my agent instead?
+Yesterday I wrote about which model runs which of the five agents in my [Hermes team](/blog/which-llm-for-which-agent-november-2026). The orchestrator runs Xiaomi's MiMo-V2.6-Pro on DeepInfra, and I mentioned that if money were no object I would put Claude Sonnet 5.5 there. Money is an object, but I also pay for a Claude Pro subscription every month and mostly use it in a browser tab. So today I asked a rude question: can the subscription pay for my agent instead?
 
 The answer turns out to be yes, through an official Hermes plugin called Claude Subscription DirectSDK, which is marked Experimental for good reasons I'll get into. Today I moved only the orchestrator to Sonnet 5.5. The other four agents are untouched and still run on DeepInfra. Here is how it went, snags included, because there were four and each one taught me something.
 
@@ -58,19 +58,19 @@ This section is the one I'd want you to actually read. Hermes runs small side jo
 
 So I pointed compression and title generation at DeepSeek-V4.1-Flash-1017 on DeepInfra. Why DeepSeek and not GLM-5.3-Flash, which my blog agent uses? Both have 1M context and both are very cheap, but DeepSeek scores higher on the coding and agentic benchmarks in DeepInfra's own [model page](https://deepinfra.com/deepseek-ai/DeepSeek-V4.1-Flash-1017), and it's already in use by three of my other agents, so the fleet gains no new model to keep track of.
 
-Here I hit the snag I'm proudest of avoiding. I first wrote `provider: main` in the auxiliary config, reasoning that "main" is a word that means something everywhere. `hermes doctor` flagged it as an unknown provider that would "silently run on the main model". That is the exact opposite of what I was trying to achieve, and nothing else in the setup would have warned me. The built-in `deepinfra` provider name resolved correctly, and after the fix doctor reported compression and title generation pointing at the DeepInfra endpoint. Moral: run `hermes doctor` after touching auxiliary routing.
+Here I hit the snag I'm proudest of avoiding. I first wrote `provider: main` in the auxiliary config, reasoning that "main" is a word that means something everywhere. `hermes doctor` flagged it as an unknown provider and warned that the task "silently runs on the main model". That is the exact opposite of what I was trying to achieve, and nothing else in the setup would have warned me. The built-in `deepinfra` provider name resolved correctly, and after the fix doctor reported compression and title generation pointing at the DeepInfra endpoint. Moral: run `hermes doctor` after touching auxiliary routing.
 
-The fallback got the same treatment. I set `fallback_model` to provider `deepinfra`, model `XiaomiMiMo/MiMo-V2.6-Pro`, so a rate limit or an outage drops back to yesterday's orchestrator model instead of failing the turn. I used `main` there at first too, then switched to `deepinfra`, because doctor doesn't validate the fallback entry and I did not want an untested safety net. `hermes fallback list` shows primary `sonnet`, then the MiMo fallback.
+The fallback got the same treatment. I set `fallback_model` to provider `deepinfra`, model `XiaomiMiMo/MiMo-V2.6-Pro`, so a rate limit or an outage drops back to yesterday's orchestrator model instead of failing the turn. I used `main` there at first too, then switched to `deepinfra`, because doctor's output said nothing about the fallback entry and I did not want an untested safety net. `hermes fallback list` shows primary `sonnet`, then the MiMo fallback.
 
-One more hardening step. Hermes' stall watchdog is off for local process-based providers on 1M model ids, so a hung call would otherwise wait for the full read timeout. I set `providers.claude-subscription-directsdk-experimental.stale_timeout_seconds: 900` so a stuck CLI process gets cut off after fifteen minutes.
+One more hardening step. per the README, Hermes' stall watchdog can be off for local process-based providers on some 1M model ids, so a hung call could otherwise wait out the full read timeout. I set `providers.claude-subscription-directsdk-experimental.stale_timeout_seconds: 900` so a stuck CLI process gets cut off after fifteen minutes.
 
 ## Login, restart, and the snag that wasn't
 
-Logging in was snag three and four in one. `claude auth login` failed with `claude: command not found`, because npm had installed the CLI under Hermes' own node tools directory, which is on Hermes' PATH but not my interactive shell's. The plugin searches a list of directories including `~/.local/bin`, so I symlinked the binary there and it worked from both places. Then `claude auth login` opened the browser OAuth flow, which I completed by hand, and `claude auth status` confirmed I was logged in with subscription type `pro`.
+Logging in was snag four. `claude auth login` failed with `claude: command not found`, because npm had installed the CLI under Hermes' own node tools directory, which is on Hermes' PATH but not my interactive shell's. The plugin searches a list of directories including `~/.local/bin`, so I symlinked the binary there and it worked from both places. Then `claude auth login` opened the browser OAuth flow, which I completed by hand, and `claude auth status` confirmed I was logged in with subscription type `pro`.
 
 Finally: `hermes gateway restart`, which has to be run from outside the running gateway. The log then showed `Model context warmed: sonnet -> 1000000 tokens`, and we were live.
 
-The thing that didn't go wrong deserves its own paragraph. My first message to the orchestrator happened before I had logged in. The Claude call failed with an authentication error, "Claude Code is installed but has no usable login", and Hermes automatically switched that single turn to the MiMo fallback and answered normally. I saw nothing break from the chat side; I only found the error in the log afterwards. So the fallback I had set up half an hour earlier got tested by accident, in real conditions, and passed. That's a better outcome than any test I would have written on purpose.
+The thing that didn't go wrong deserves its own paragraph. My first message to the orchestrator happened before I had logged in. The Claude call failed with an authentication error, "Claude Code is installed but has no usable login", and Hermes automatically switched that single turn to the MiMo fallback and answered normally. I saw nothing break from the chat side; I only found the error in the log afterwards. So the fallback I had set up earlier in the same session got tested by accident, in real conditions, and passed. That's a better outcome than any test I would have written on purpose.
 
 ## Early numbers, with honest caveats
 
@@ -89,7 +89,7 @@ The cache numbers matter because the README mentions an earlier long-context tes
 
 Now the caveats, plainly. It is day one. I send roughly 40 orchestrator turns a day and I have no multi-day data on how that interacts with the Pro 5-hour window, so I will be watching `/usage` this week. I'm not claiming cost savings. The honest framing is this: I've traded per-token pricing for a fixed monthly cost with a usage ceiling, and I don't yet know whether Pro's allowance is enough for my orchestrator. If it isn't, the options are a bigger plan or moving back.
 
-## The config as it stands
+## The config, trimmed to the relevant parts
 
 ```yaml
 # orchestrator profile config.yaml
@@ -112,13 +112,13 @@ providers:
     stale_timeout_seconds: 900
 ```
 
-No API key appears here. The Claude side uses the CLI login, and the DeepInfra side authenticates through the `DEEPINFRA_API_KEY` environment variable. If I want to roll back, it's `hermes config set model.provider custom`, `hermes config set model.default XiaomiMiMo/MiMo-V2.6-Pro`, restore the DeepInfra base_url, restart the gateway. I tested the rollback path implicitly via the fallback, but I haven't done the full rollback, so treat that as untested-but-short.
+No API key appears here. The Claude side uses the CLI login, and the DeepInfra side authenticates through the `DEEPINFRA_API_KEY` environment variable. If I want to roll back, it's `hermes config set model.provider custom`, `hermes config set model.default XiaomiMiMo/MiMo-V2.6-Pro`, restore the DeepInfra base_url, restart the gateway. I haven't run the full rollback, so treat it as untested but short.
 
 ## Should you do this?
 
-Three questions. Do you already pay for Claude Pro or Max? Is the agent you're moving one where a stronger model pays for itself in fewer retries and better tool calls? And are you comfortable running something the author explicitly calls "a review build, not a full-parity or production-readiness claim"? The README also warns that text arriving after tool rounds can come as one block instead of streaming smoothly (their issue #33), which I did notice but didn't mind.
+Three questions. Do you already pay for Claude Pro or Max? Is the agent you're moving one where a stronger model pays for itself in fewer retries and better tool calls? And are you comfortable running something the author explicitly calls "a review build, not a full-parity or production-readiness claim"? The README also warns that text arriving after tool rounds can come as one block instead of streaming smoothly (their issue #33).
 
-If those answers are yes, the setup took me about an hour including the debugging, and the parts that took longest were the two things no blog post warned me about: the npm postinstall block and the `provider: main` trap in auxiliary routing. Keep the side jobs off the subscription, keep a fallback on a per-token provider, and run `hermes doctor` after every routing change.
+If those answers are yes, the parts that cost me the most time were the two things nothing warned me about: the npm postinstall block and the `provider: main` trap in auxiliary routing. Keep the side jobs off the subscription, keep a fallback on a per-token provider, and run `hermes doctor` after every routing change.
 
 If your agent does hundreds of turns a day, do the arithmetic on your plan's allowance first. And if you don't have a subscription at all, this post gives you nothing to save money on, which is fine.
 
