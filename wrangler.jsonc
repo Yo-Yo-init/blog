@@ -6,6 +6,7 @@
        "not_found_handling": "404-page"
      },
      "routes": [
+       { "pattern": "chililab.dev", "custom_domain": true },
        { "pattern": "pepperslab.habanada.com", "custom_domain": true }
      ],
      "previews": {}
