@@ -1,6 +1,6 @@
-# Pepper's Lab
+# Chili Lab
 
-Cybersecurity notes, homelab builds, and documentation. Markdown content rendered with Jinja templates into a static site, hosted on Cloudflare.
+Homelab, networking and self-hosted AI agent guides. Markdown content rendered with Jinja templates into a static site, hosted on Cloudflare.
 
 ## Quick start
 

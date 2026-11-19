@@ -1,7 +1,8 @@
 # Site-wide configuration
 
-SITE_NAME = "Pepper's Lab"
-SITE_DESCRIPTION = "Cybersecurity notes, homelab builds, and documentation."
+SITE_NAME = "Chili Lab"
+SITE_DESCRIPTION = ("Homelab, networking and self-hosted AI agent guides: Proxmox, Pi-hole, Authelia, "
+                    "Nginx Proxy Manager and Hermes Agent, with real configs and fixes.")
 SITE_AUTHOR = "Pepper"
 
 # Paths (relative to project root)

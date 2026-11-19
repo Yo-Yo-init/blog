@@ -186,15 +186,25 @@ def build() -> None:
         if in_sitemap:
             lastmod[path] = mod
 
-    add("/", "index.html", newest, page_title="Home", posts=posts[:5], recent=posts[:4],
+    # Keyword-first page titles (rendered as "<page_title> | <site name>").
+    home_title = "Homelab, Networking & Self-Hosted AI Agents"
+    blog_title = "Homelab, Networking & AI Agent Guides"
+    website_ld = {"@context": "https://schema.org", "@type": "WebSite", "name": SITE_NAME,
+                  "url": _abs("/"), "description": SITE_DESCRIPTION, "inLanguage": "en"}
+    add("/", "index.html", newest, page_title=home_title, posts=posts[:5], recent=posts[:4],
         categories=_categories_with_counts(), topics=_top_topics(), main_class="with-sidebar",
-        seo=_seo("/", title=SITE_NAME, description=SITE_DESCRIPTION))
-    add("/about/", "about.html", None, page_title="About",
-        seo=_seo("/about/", title=f"About — {SITE_NAME}", description=SITE_DESCRIPTION))
-    add("/blog/", "blog_list.html", newest, page_title="Blog", posts=posts, search_query="",
+        seo=_seo("/", title=f"{home_title} | {SITE_NAME}", description=SITE_DESCRIPTION,
+                 jsonld=website_ld))
+    add("/about/", "about.html", None, page_title="About Pepper",
+        seo=_seo("/about/", title=f"About Pepper | {SITE_NAME}",
+                 description=f"About {SITE_NAME} and its author Pepper, an IT technician who "
+                             "documents homelab, networking and self-hosted AI projects."))
+    add("/blog/", "blog_list.html", newest, page_title=blog_title, posts=posts, search_query="",
         topics=_top_topics(limit=None), active_category=None,
         categories=_categories_with_counts(), main_class="with-sidebar",
-        seo=_seo("/blog/", title=f"Blog — {SITE_NAME}", description=SITE_DESCRIPTION))
+        seo=_seo("/blog/", title=f"{blog_title} | {SITE_NAME}",
+                 description=f"Every {SITE_NAME} post, newest first: Proxmox and homelab builds, "
+                             "DNS and VPN fixes, Authelia and reverse proxies, and Hermes AI agents."))
 
     for post in posts:
         path = f"/blog/{post.slug}/"
@@ -231,17 +241,18 @@ def build() -> None:
     # /docs/ renders the first doc, so it is a duplicate: canonical points at that doc
     # and it stays out of the sitemap.
     docs_canonical = f"/docs/{docs[0].slug}/" if docs else "/docs/"
+    docs_desc = f"Reference notes and runbooks from the {SITE_NAME} homelab."
     add("/docs/", "doc_page.html", None, in_sitemap=False, page_title="Documentation", docs=docs,
         current=docs[0] if docs else None, main_class="docs-wide",
-        seo=_seo("/docs/", title=f"Documentation — {SITE_NAME}", description=SITE_DESCRIPTION,
+        seo=_seo("/docs/", title=f"Documentation | {SITE_NAME}", description=docs_desc,
                  canonical_path=docs_canonical))
     for doc in docs:
         path = f"/docs/{doc.slug}/"
         add(path, "doc_page.html", doc.modified, page_title=doc.title, docs=docs, current=doc,
             main_class="docs-wide",
-            seo=_seo(path, title=f"{doc.title} — {SITE_NAME}", description=SITE_DESCRIPTION))
+            seo=_seo(path, title=f"{doc.title} | {SITE_NAME}", description=docs_desc))
     _write(env, "404.html", "404.html", page_title="Page not found",
-           seo=_seo("/404/", title=f"Page not found — {SITE_NAME}", description=SITE_DESCRIPTION,
+           seo=_seo("/404/", title=f"Page not found | {SITE_NAME}", description=SITE_DESCRIPTION,
                     noindex=True))
 
     shutil.copytree(ROOT / STATIC_DIR, DIST / "static",
