@@ -10,7 +10,7 @@ draft: false
 
 I run [Nginx Proxy Manager](https://nginxproxymanager.com/) (NPM) as the front door for most of my self-hosted services, and I want a single login gate in front of all of them. That's what [Authelia](https://www.authelia.com/) gives me: an authentication middleware that sits between the internet and things like Sonarr, Portainer, or Nextcloud. Before anyone reaches a protected app, they have to pass Authelia first.
 
-I wrote [earlier about setting up Authelia itself](/blog/integrating-authelia-with-nginx-proxy-manager) — generating secrets, the users database, `configuration.yml`. This post is the other half: the **NPM side**. How to mount a small folder of reusable nginx "snippets" into NPM, and how to protect any proxy host by pasting one short block into its Advanced tab. Once the snippets are in place, protecting a new service takes about two minutes.
+I wrote earlier about setting up Authelia itself — generating secrets, the users database, `configuration.yml`. This post is the other half: the **NPM side**. How to mount a small folder of reusable nginx "snippets" into NPM, and how to protect any proxy host by pasting one short block into its Advanced tab. Once the snippets are in place, protecting a new service takes about two minutes.
 
 ## 1. The big picture
 

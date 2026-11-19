@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{{ page_title }} — {{ site_name }}{% endblock %}</title>
+    <title>{% block title %}{{ page_title }} | {{ site_name }}{% endblock %}</title>
     <meta name="description" content="{% block meta_desc %}{{ seo.description if seo else site_description }}{% endblock %}" />
     <meta name="author" content="{{ site_author }}" />
     <link rel="alternate" type="application/rss+xml" title="{{ site_name }}" href="{{ seo.site_url if seo else '' }}/feed.xml" />
@@ -39,7 +39,7 @@
 {% endif %}
 {% else %}
     <!-- Open Graph (dev server fallback: build.py supplies the full set) -->
-    <meta property="og:title" content="{{ page_title }} — {{ site_name }}" />
+    <meta property="og:title" content="{{ page_title }} | {{ site_name }}" />
     <meta property="og:description" content="{{ site_description }}" />
     <meta property="og:type" content="website" />
 {% endif %}

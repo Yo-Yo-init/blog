@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ post.title }} — {{ site_name }}{% endblock %}
+{% block title %}{{ post.title }} | {{ site_name }}{% endblock %}
 {% block meta_desc %}{{ seo.description if seo else post.summary }}{% endblock %}
 
 {% block content %}
