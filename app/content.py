@@ -2,6 +2,8 @@
 Content pipeline — loads Markdown files, parses frontmatter, renders HTML.
 """
 
+from __future__ import annotations
+
 import re
 from pathlib import Path
 from datetime import datetime
@@ -64,7 +66,8 @@ class Post:
 
     def __init__(self, slug: str, title: str, date: datetime, summary: str,
                  tags: list[str], image: str, content_html: str, draft: bool = False,
-                 category: str = "homelab"):
+                 category: str = "homelab", updated: datetime | None = None,
+                 author: str = ""):
         self.slug = slug
         self.title = title
         self.date = date
@@ -74,6 +77,13 @@ class Post:
         self.content_html = content_html
         self.draft = draft
         self.category = category
+        self.updated = updated      # optional `updated:` frontmatter
+        self.author = author        # optional `author:` frontmatter
+
+    @property
+    def modified(self) -> datetime:
+        """Last-modified moment for sitemap/JSON-LD: `updated` if set, else `date`."""
+        return self.updated or self.date
 
     @property
     def date_display(self) -> str:
@@ -83,11 +93,13 @@ class Post:
 class DocPage:
     """Represents a documentation page."""
 
-    def __init__(self, slug: str, title: str, order: int, content_html: str):
+    def __init__(self, slug: str, title: str, order: int, content_html: str,
+                 modified: datetime | None = None):
         self.slug = slug
         self.title = title
         self.order = order
         self.content_html = content_html
+        self.modified = modified    # `updated:` else `date:` frontmatter, else None
 
 
 # ---------------------------------------------------------------------------
@@ -109,6 +121,17 @@ def _slug_from_filename(filename: str) -> str:
     # Strip leading date pattern (YYYY-MM-DD-)
     name = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", name)
     return name
+
+
+def _as_datetime(val) -> datetime | None:
+    """Coerce a frontmatter date (datetime, date or ISO string) to a naive datetime."""
+    if val is None or val == "":
+        return None
+    if isinstance(val, datetime):
+        return val.replace(tzinfo=None)
+    if isinstance(val, str):
+        return datetime.fromisoformat(val).replace(tzinfo=None)
+    return datetime(val.year, val.month, val.day)  # datetime.date
 
 
 def load_posts() -> list[Post]:
@@ -143,6 +166,8 @@ def load_posts() -> list[Post]:
             content_html=_md(post_data.content),
             draft=False,
             category=meta.get("category", "homelab"),
+            updated=_as_datetime(meta.get("updated")),
+            author=str(meta.get("author", "") or ""),
         ))
 
     posts.sort(key=lambda p: p.date, reverse=True)
@@ -166,6 +191,7 @@ def load_docs() -> list[DocPage]:
             title=meta.get("title", filepath.stem),
             order=meta.get("order", 99),
             content_html=_md(doc_data.content),
+            modified=_as_datetime(meta.get("updated")) or _as_datetime(meta.get("date")),
         ))
 
     docs.sort(key=lambda d: d.order)
