@@ -11,7 +11,7 @@ draft: false
 
 # Running My Orchestrator on a Claude Pro Subscription
 
-Yesterday I wrote about which model runs which of the five agents in my [Hermes team](/blog/which-llm-for-which-agent-november-2026). The orchestrator runs Xiaomi's MiMo-V2.6-Pro on DeepInfra, and I mentioned that if money were no object I would put Claude Sonnet 5.5 there. Money is an object, but I also pay for a Claude Pro subscription every month and mostly use it in a browser tab. So today I asked a rude question: can the subscription pay for my agent instead?
+Yesterday I wrote about which model runs which of the five agents in my [Hermes team](/blog/which-llm-for-which-agent-november-2026/). The orchestrator runs Xiaomi's MiMo-V2.6-Pro on DeepInfra, and I mentioned that if money were no object I would put Claude Sonnet 5.5 there. Money is an object, but I also pay for a Claude Pro subscription every month and mostly use it in a browser tab. So today I asked a rude question: can the subscription pay for my agent instead?
 
 The answer turns out to be yes, through an official Hermes plugin called Claude Subscription DirectSDK, which is marked Experimental for good reasons I'll get into. Today I moved only the orchestrator to Sonnet 5.5. The other four agents are untouched and still run on DeepInfra. Here is how it went, snags included, because there were four and each one taught me something.
 
