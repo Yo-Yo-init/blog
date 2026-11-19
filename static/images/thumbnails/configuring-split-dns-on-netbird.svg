@@ -1,19 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="A laptop's DNS query splitting toward a local house and the public internet">
   <defs>
     <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.6"/>
     </pattern>
   </defs>
+  <rect width="800" height="450" fill="#FAF6EF"/>
   <rect width="800" height="450" fill="url(#dotgrid)"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-  <rect x="270" y="200" width="55" height="45" rx="8" stroke="#6E7F5C" stroke-width="10"/>
-  <path d="M 282 200 L 282 180 A 16 16 0 0 1 314 180 L 314 200" stroke="#6E7F5C" stroke-width="10"/>
-  <line x1="325" y1="222" x2="400" y2="222" stroke="#B5502E" stroke-width="9"/>
-  <path d="M 400 222 Q 440 222 460 175" stroke="#B5502E" stroke-width="9" fill="none"/>
-  <path d="M 400 222 Q 440 222 460 270" stroke="#B5502E" stroke-width="9" fill="none"/>
-  <circle cx="475" cy="165" r="16" stroke="#B5502E" stroke-width="9"/>
-  <circle cx="475" cy="280" r="16" stroke="#B5502E" stroke-width="9"/>
-
+<rect x="80" y="190" width="130" height="88" rx="8" stroke="#3B322B" stroke-width="8" fill="#FAF6EF" />
+<line x1="60" y1="300" x2="230" y2="300" stroke="#3B322B" stroke-width="11" />
+<path d="M 212 234 H 290" stroke="#B5502E" stroke-width="9" fill="none" />
+<circle cx="302" cy="234" r="13" stroke="#B5502E" stroke-width="3" fill="#B5502E" />
+<path d="M 302 234 C 352 234 350 130 430 130" stroke="#B5502E" stroke-width="8" fill="none" />
+<path d="M 302 234 C 352 234 350 328 430 328" stroke="#6E7F5C" stroke-width="8" fill="none" />
+<line x1="424" y1="130" x2="448" y2="130" stroke="#B5502E" stroke-width="8" /><path d="M 434.0 137.7 L 448 130 L 434.0 122.3" stroke="#B5502E" stroke-width="8" fill="none" />
+<line x1="424" y1="328" x2="448" y2="328" stroke="#6E7F5C" stroke-width="8" /><path d="M 434.0 335.7 L 448 328 L 434.0 320.3" stroke="#6E7F5C" stroke-width="8" fill="none" />
+<path d="M 468 154 L 540 94 L 612 154" stroke="#B5502E" stroke-width="9" fill="none" />
+<rect x="488" y="154" width="104" height="76" rx="6" stroke="#B5502E" stroke-width="9" fill="#F3DACB" />
+<rect x="524" y="184" width="32" height="46" rx="4" stroke="#B5502E" stroke-width="6" fill="#FAF6EF" />
+<circle cx="540" cy="332" r="60" stroke="#6E7F5C" stroke-width="9" fill="#DFE6D5" />
+<ellipse cx="540" cy="332" rx="26" ry="60" stroke="#6E7F5C" stroke-width="6" fill="none" />
+<line x1="480" y1="332" x2="600" y2="332" stroke="#6E7F5C" stroke-width="6" />
+<path d="M 490 302 Q 540 320 590 302" stroke="#6E7F5C" stroke-width="6" fill="none" />
+<path d="M 490 362 Q 540 344 590 362" stroke="#6E7F5C" stroke-width="6" fill="none" />
+<rect x="128" y="126" width="46" height="36" rx="7" stroke="#3B322B" stroke-width="7" fill="#FAF6EF" />
+<path d="M 138 126 V 114 A 13 13 0 0 1 164 114 V 126" stroke="#3B322B" stroke-width="7" fill="none" />
+<line x1="151" y1="140" x2="151" y2="150" stroke="#3B322B" stroke-width="6" />
   </g>
 </svg>

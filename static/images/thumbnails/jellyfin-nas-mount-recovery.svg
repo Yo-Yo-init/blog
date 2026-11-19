@@ -1,20 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="A NAS reconnected to a jellyfish with a play button">
   <defs>
     <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.6"/>
     </pattern>
   </defs>
+  <rect width="800" height="450" fill="#FAF6EF"/>
   <rect width="800" height="450" fill="url(#dotgrid)"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-  <rect x="280" y="150" width="130" height="150" rx="12" stroke="#B5502E" stroke-width="12"/>
-  <line x1="298" y1="185" x2="392" y2="185" stroke="#B5502E" stroke-width="7"/>
-  <line x1="298" y1="225" x2="392" y2="225" stroke="#B5502E" stroke-width="7"/>
-  <line x1="298" y1="265" x2="392" y2="265" stroke="#B5502E" stroke-width="7"/>
-  <circle cx="500" cy="225" r="55" stroke="#6E7F5C" stroke-width="10"/>
-  <path d="M 482 198 L 482 252 L 528 225 Z" fill="#6E7F5C" stroke="none"/>
-  <path d="M 500 130 A 40 40 0 1 1 468 155" stroke="#B5502E" stroke-width="8"/>
-  <path d="M 468 140 L 468 158 L 486 156" stroke="#B5502E" stroke-width="8"/>
-
+<rect x="90" y="190" width="190" height="160" rx="14" stroke="#6E7F5C" stroke-width="9" fill="#DFE6D5" />
+<rect x="114" y="216" width="142" height="38" rx="8" stroke="#6E7F5C" stroke-width="6" fill="#FAF6EF" />
+<rect x="114" y="270" width="142" height="38" rx="8" stroke="#6E7F5C" stroke-width="6" fill="#FAF6EF" />
+<circle cx="236" cy="235" r="6" stroke="#B5502E" stroke-width="4" fill="#B5502E" />
+<circle cx="236" cy="289" r="6" stroke="#B5502E" stroke-width="4" fill="#B5502E" />
+<line x1="124" y1="336" x2="150" y2="336" stroke="#6E7F5C" stroke-width="6" />
+<path d="M 280 300 H 340" stroke="#3B322B" stroke-width="9" fill="none" />
+<rect x="338" y="284" width="46" height="32" rx="6" stroke="#3B322B" stroke-width="7" fill="#FAF6EF" />
+<rect x="378" y="287" width="44" height="26" rx="5" stroke="#3B322B" stroke-width="7" fill="#CDBFAE" />
+<path d="M 422 300 H 486" stroke="#3B322B" stroke-width="9" fill="none" />
+<circle cx="486" cy="300" r="7" stroke="#B5502E" stroke-width="4" fill="#B5502E" />
+<circle cx="382" cy="238" r="24" stroke="#6E7F5C" stroke-width="8" fill="#FAF6EF" />
+<path d="M 370.0 238.0 L 379.6 247.6 L 395.2 228.4" stroke="#6E7F5C" stroke-width="8" fill="none" />
+<path d="M 466 236 C 466 120 654 120 654 236 Z" stroke="#B5502E" stroke-width="9" fill="#F3DACB" />
+<path d="M 548 170 L 548 210 L 586 190 Z" stroke="#B5502E" stroke-width="5" fill="#B5502E" />
+<path d="M 486 242 q -13 24 0 46 t 0 46 t 0 46" stroke="#6E7F5C" stroke-width="7" fill="none" />
+<path d="M 523 242 q -13 24 0 46 t 0 46 t 0 46" stroke="#6E7F5C" stroke-width="7" fill="none" />
+<path d="M 560 242 q -13 24 0 46 t 0 46 t 0 46" stroke="#6E7F5C" stroke-width="7" fill="none" />
+<path d="M 597 242 q -13 24 0 46 t 0 46 t 0 46" stroke="#6E7F5C" stroke-width="7" fill="none" />
+<path d="M 634 242 q -13 24 0 46 t 0 46 t 0 46" stroke="#6E7F5C" stroke-width="7" fill="none" />
   </g>
 </svg>
