@@ -1,17 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="A virtual machine moving between two hosts over a damaged network cable">
   <defs>
     <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.6"/>
     </pattern>
   </defs>
+  <rect width="800" height="450" fill="#FAF6EF"/>
   <rect width="800" height="450" fill="url(#dotgrid)"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-  <circle cx="300" cy="220" r="35" stroke="#B5502E" stroke-width="10"/>
-  <circle cx="500" cy="220" r="35" stroke="#B5502E" stroke-width="10"/>
-  <line x1="335" y1="220" x2="465" y2="220" stroke="#B5502E" stroke-width="8" stroke-dasharray="4 16"/>
-  <circle cx="480" cy="290" r="38" stroke="#6E7F5C" stroke-width="10" fill="none"/>
-  <path d="M 462 290 L 476 305 L 502 275" stroke="#6E7F5C" stroke-width="9"/>
-
+<rect x="80" y="150" width="200" height="144" rx="14" stroke="#6E7F5C" stroke-width="9" fill="#DFE6D5" />
+<rect x="520" y="150" width="200" height="144" rx="14" stroke="#B5502E" stroke-width="9" fill="#F3DACB" />
+<line x1="106" y1="190" x2="208" y2="190" stroke="#3B322B" stroke-width="6" />
+<line x1="106" y1="222" x2="208" y2="222" stroke="#3B322B" stroke-width="6" />
+<line x1="106" y1="254" x2="170" y2="254" stroke="#3B322B" stroke-width="6" />
+<circle cx="244" cy="190" r="7" stroke="#6E7F5C" stroke-width="4" fill="#6E7F5C" />
+<line x1="546" y1="190" x2="648" y2="190" stroke="#3B322B" stroke-width="6" />
+<line x1="546" y1="222" x2="648" y2="222" stroke="#3B322B" stroke-width="6" />
+<line x1="546" y1="254" x2="610" y2="254" stroke="#3B322B" stroke-width="6" />
+<circle cx="684" cy="190" r="7" stroke="#B5502E" stroke-width="4" fill="#B5502E" />
+<path d="M 205 150 C 250 28 550 28 595 150" stroke="#3B322B" stroke-width="6" fill="none" stroke-dasharray="2 15"/>
+<line x1="586" y1="124" x2="597" y2="152" stroke="#3B322B" stroke-width="6" /><path d="M 586.3 143.0 L 597 152 L 598.8 138.1" stroke="#3B322B" stroke-width="6" fill="none" />
+<polygon points="400,48 436,66 400,84 364,66" stroke="#B5502E" stroke-width="7" fill="#FAF6EF" />
+<polygon points="364,66 400,84 400,124 364,106" stroke="#B5502E" stroke-width="7" fill="#F3DACB" />
+<polygon points="436,66 400,84 400,124 436,106" stroke="#B5502E" stroke-width="7" fill="#E9BFA6" />
+<path d="M 180 294 V 352 H 352" stroke="#3B322B" stroke-width="9" fill="none" />
+<path d="M 620 294 V 352 H 448" stroke="#3B322B" stroke-width="9" fill="none" />
+<path d="M 410 322 L 392 354 L 414 354 L 392 388" stroke="#B5502E" stroke-width="9" fill="none" />
+<circle cx="700" cy="150" r="22" stroke="#6E7F5C" stroke-width="8" fill="#FAF6EF" />
+<path d="M 689.0 150.0 L 697.8 158.8 L 712.1 141.2" stroke="#6E7F5C" stroke-width="8" fill="none" />
   </g>
 </svg>

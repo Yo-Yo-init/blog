@@ -1,15 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Layers of a homelab: hardware, hypervisor, virtual machines and containers">
   <defs>
     <pattern id="dotgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.45"/>
+      <circle cx="20" cy="20" r="1.6" fill="#C9B8A2" opacity="0.6"/>
     </pattern>
   </defs>
+  <rect width="800" height="450" fill="#FAF6EF"/>
   <rect width="800" height="450" fill="url(#dotgrid)"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-  <rect x="270" y="255" width="110" height="80" rx="10" stroke="#B5502E" stroke-width="11"/>
-  <rect x="345" y="195" width="110" height="80" rx="10" stroke="#6E7F5C" stroke-width="11"/>
-  <rect x="420" y="135" width="110" height="80" rx="10" stroke="#B5502E" stroke-width="11"/>
-
+<g transform="translate(-44 -54) scale(1.11)">
+<rect x="130" y="330" width="540" height="74" rx="12" stroke="#6E7F5C" stroke-width="9" fill="#DFE6D5" />
+<rect x="160" y="348" width="70" height="38" rx="6" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="245" y="348" width="70" height="38" rx="6" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="330" y="348" width="70" height="38" rx="6" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<circle cx="600" cy="367" r="7" stroke="#B5502E" stroke-width="4" fill="#B5502E" />
+<circle cx="630" cy="367" r="7" stroke="#6E7F5C" stroke-width="4" fill="#6E7F5C" />
+<rect x="160" y="252" width="480" height="58" rx="12" stroke="#B5502E" stroke-width="9" fill="#F3DACB" />
+<rect x="190" y="269" width="62" height="24" rx="12" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="276" y="269" width="62" height="24" rx="12" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="362" y="269" width="62" height="24" rx="12" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="448" y="269" width="62" height="24" rx="12" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="534" y="269" width="62" height="24" rx="12" stroke="#6E7F5C" stroke-width="5" fill="#FAF6EF" />
+<rect x="165" y="130" width="150" height="100" rx="10" stroke="#B5502E" stroke-width="8" fill="#FAF6EF" />
+<line x1="179" y1="158" x2="301" y2="158" stroke="#B5502E" stroke-width="5" />
+<rect x="183" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="225" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="267" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="325" y="130" width="150" height="100" rx="10" stroke="#B5502E" stroke-width="8" fill="#FAF6EF" />
+<line x1="339" y1="158" x2="461" y2="158" stroke="#B5502E" stroke-width="5" />
+<rect x="343" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="385" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="427" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="485" y="130" width="150" height="100" rx="10" stroke="#B5502E" stroke-width="8" fill="#FAF6EF" />
+<line x1="499" y1="158" x2="621" y2="158" stroke="#B5502E" stroke-width="5" />
+<rect x="503" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="545" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+<rect x="587" y="180" width="28" height="28" rx="6" stroke="#6E7F5C" stroke-width="6" fill="#DFE6D5" />
+</g>
   </g>
 </svg>

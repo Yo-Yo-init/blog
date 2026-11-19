@@ -36,6 +36,15 @@ draft: false             # true = excluded from the build
 - Start the body with a short intro paragraph, then `##` / `###` headings (they build the table of contents).
 - Code blocks need a language (` ```bash `, ` ```yaml `) for syntax highlighting.
 
+## Thumbnails
+
+Each post has a 16:9 SVG hero at `static/images/thumbnails/<slug>.svg` (800x450). They only show as the hero at the top of a post, so draw them to be read at about 740px wide.
+
+- **Depict the post, not a generic diagram.** Pick the one distinctive object or scene a reader would recognise (a Raspberry Pi board for Pi-hole, a jellyfish for Jellyfin, a gate with a keyhole for Authelia) and make it fill roughly 60 to 80 percent of the frame. Two thumbnails should never be interchangeable.
+- **Style:** warm paper plate (`#FAF6EF`) with the dot grid pattern, round-cap line art, stroke width 6 to 10, no text. Palette: chili red `#B5502E`, sage `#6E7F5C`, warm ink `#3B322B`, tints `#F3DACB` (red) and `#DFE6D5` (sage), tan `#CDBFAE`. The solid plate keeps it readable in dark mode.
+- **No logos or trademarks.** Evoke the thing (a jellyfish, a board, a winged messenger for Hermes) instead of copying a brand mark.
+- **Check before committing:** render the SVG with a spec-accurate renderer and look at it in light and dark. Some quick rasterisers (for example MuPDF) ignore `<pattern>` and dashed strokes and show a black background, which is a tool quirk, not a bug in the file.
+
 ## Docs front matter
 
 ```yaml
