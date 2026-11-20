@@ -4,10 +4,10 @@ date: 2025-02-11
 summary: "A recovery guide for when Jellyfin loses access to media after a server freeze causes SMB/CIFS mounts to drop."
 tags: [self-hosted, jellyfin, nas, troubleshooting]
 image: /static/images/thumbnails/jellyfin-nas-mount-recovery.svg
+hero_alt: "Line drawing of a NAS connected by a cable to a jellyfish with a play button on its bell, a green check on the reconnected plug."
 draft: false
 ---
 
-# Recovery Guide: Jellyfin & NAS Mount Recovery
 
 **Scenario:** The server froze due to CPU overload (heavy downloading/unpacking), causing the network shares (SMB/CIFS) to drop. Jellyfin cannot see media because the `/data` directory is empty or unmounted.
 

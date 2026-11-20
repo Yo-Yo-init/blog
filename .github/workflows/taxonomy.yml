@@ -1,14 +1,14 @@
-name: Taxonomy check
+name: Content checks
 
-# Fails a pull request when a post uses a tag that is not in content/tags.yaml,
-# or when the registry itself is inconsistent. Also proves the site still builds.
+# Fails a pull request when a post uses a tag that is not in content/tags.yaml, breaks the
+# heading or hero_alt rules, or when a colour pair drops below WCAG AA. Also proves the site builds.
 on:
   pull_request:
   push:
     branches: [main]
 
 jobs:
-  taxonomy:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,5 +19,9 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Tags used by posts exist in the registry
         run: python scripts/check_taxonomy.py
+      - name: Post headings and hero alt text
+        run: python scripts/check_content.py
+      - name: Colour contrast (WCAG AA)
+        run: python scripts/check_contrast.py
       - name: Site builds
         run: python build.py

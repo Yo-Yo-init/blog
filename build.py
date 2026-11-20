@@ -234,7 +234,7 @@ def build() -> None:
         add(path, "blog_post.html", post.modified, page_title=post.title, post=post,
             main_class="post-wide",
             seo=_seo(path, title=post.title, description=desc, og_type="article", image=image,
-                     image_alt=post.title, jsonld=jsonld, article=article))
+                     image_alt=post.hero_alt or post.title, jsonld=jsonld, article=article))
 
     # ---- tag and category pages (real static pages; the old ?q= / ?category= links are
     # 301ed to these by src/worker.js) --------------------------------------------------

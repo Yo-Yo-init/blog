@@ -12,7 +12,9 @@
     --bg: #ffffff;
     --bg-secondary: #f7f7f5;
     --text: #37352f;
-    --text-muted: #787774;
+    /* Muted text: 5.2:1 on white, 4.8:1 on the chip background (WCAG AA needs 4.5:1).
+       scripts/check_contrast.py fails CI if this drops below the minimum. */
+    --text-muted: #6f6d68;
     --border: #e9e9e7;
     --border-strong: #d3d1cb;
     /* Muted chili red, 5.7:1 on white (AA for normal text). */
@@ -66,6 +68,30 @@
     outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 2px;
+}
+
+/* ---- Skip link: first focusable element, visible only when focused ---- */
+.skip-link {
+    position: absolute;
+    left: var(--space-2);
+    top: -100px;
+    z-index: 1000;
+    padding: var(--space-1) var(--space-2);
+    background: var(--bg);
+    color: var(--text);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: var(--space-1);
+}
+
+/* The skip link moves focus to <main>; no ring around the whole page. */
+main:focus {
+    outline: none;
 }
 
 /* ---- Reset ---- */

@@ -4,18 +4,19 @@ date: 2025-02-19
 summary: "A step-by-step guide to configuring Split DNS on NetBird so your local domains resolve correctly over a VPN tunnel."
 tags: [networking, netbird, dns, vpn]
 image: /static/images/thumbnails/configuring-split-dns-on-netbird.svg
+hero_alt: "Line drawing of a laptop with a padlock whose DNS query forks in two: one path to a house for local names, one to a globe for public names."
 draft: false
 ---
 
 Here is the refined, step-by-step guide to making your local domains work remotely over NetBird.
 
-### **The Goal**
+## The Goal
 
 We will configure **Split DNS**. This tells NetBird: _"When I try to access `anything.mydomain.com`, do not ask the public internet (Google). Instead, send that question through the VPN tunnel to my home Pi-hole."_
 
 ---
 
-### **Prerequisites**
+## Prerequisites
 
 1. **NetBird Admin Access:** You need access to the [NetBird Dashboard](https://app.netbird.io/).
     
@@ -26,7 +27,7 @@ We will configure **Split DNS**. This tells NetBird: _"When I try to access `any
 
 ---
 
-### **Step 1: Identify your DNS Server IP**
+## Step 1: Identify your DNS Server IP
 
 First, determine which IP address NetBird should target.
 
@@ -37,7 +38,7 @@ First, determine which IP address NetBird should target.
 
 **Recommendation:** Since you can already access services via IPv4, use the **Local LAN IP**.
 
-### **Step 2: Add the Nameserver in NetBird**
+## Step 2: Add the Nameserver in NetBird
 
 1. Log in to the **[NetBird Admin Panel](https://app.netbird.io/)**.
     
@@ -46,7 +47,7 @@ First, determine which IP address NetBird should target.
 3. Click the **Add Nameserver** button.
     
 
-### **Step 3: Configure the Nameserver**
+## Step 3: Configure the Nameserver
 
 Fill in the popup form with the following details:
 
@@ -72,7 +73,7 @@ Fill in the popup form with the following details:
 
 Click **Save**.
 
-### **Step 4: Refresh the Client**
+## Step 4: Refresh the Client
 
 DNS settings can take a moment to propagate.
 
@@ -85,7 +86,7 @@ DNS settings can take a moment to propagate.
 
 ---
 
-### **Step 5: Verification (Do this before opening the browser)**
+## Step 5: Verification (Do this before opening the browser)
 
 Before you try to load the dashboard, check if your computer is actually finding the address.
 
@@ -116,7 +117,7 @@ nslookup jellyfin.yourdomain.com
 
 ---
 
-### **Step 6: The Result**
+## Step 6: The Result
 
 Once `nslookup` returns the correct local IP:
 

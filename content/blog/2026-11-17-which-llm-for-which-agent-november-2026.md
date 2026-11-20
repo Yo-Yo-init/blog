@@ -5,10 +5,10 @@ author: Pepper
 summary: "Which model runs each of my five Hermes agents and why: the dream picks, the cheap models I actually run, and what each team costs per month — a mid-November 2026 snapshot."
 tags: [homelab, hermes-agent, llm, deepinfra]
 image: /static/images/thumbnails/which-llm-for-which-agent-november-2026.svg
+hero_alt: "Line drawing of a balance scale with one large gem on one pan and five small chips on the other."
 draft: false
 ---
 
-# Which LLM for Which Agent? My Hermes Team, November 2026 Edition
 
 Quick disclaimer before anything else: this post has a shelf life of about a month. Since September alone we've had new Claude, GPT, Gemini, Kimi and DeepSeek releases, and prices keep moving with them. Google's Gemini 4 prices double on December 1. Treat everything below as a snapshot of mid-November 2026, not gospel. If you're reading this in the spring, half these models have probably been replaced.
 
