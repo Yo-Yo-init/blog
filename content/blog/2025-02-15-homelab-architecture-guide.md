@@ -4,7 +4,6 @@ date: 2025-02-15
 summary: "A hybrid architecture guide for Proxmox using LXC containers for core infrastructure and a Docker VM for application stacks."
 tags: [proxmox, docker, homelab]
 image: /static/images/thumbnails/homelab-architecture-guide.svg
-category: homelab
 draft: false
 ---
 

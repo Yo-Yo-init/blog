@@ -5,7 +5,6 @@ author: Pepper
 summary: "How I moved just my orchestrator agent to Claude Sonnet 5.5 using the experimental Claude Subscription DirectSDK plugin, which bills my existing Pro subscription instead of a per-token API key."
 tags: [homelab, hermes-agent, claude, llm]
 image: /static/images/thumbnails/running-hermes-on-a-claude-subscription.svg
-category: ai
 draft: false
 ---
 

@@ -1,14 +1,13 @@
 ---
-title: "Building a Home Lab From Scratch"
+title: "Building a Homelab From Scratch"
 date: 2025-01-15
-summary: "A walkthrough of my Proxmox-based home lab setup — from hardware selection to VM provisioning."
+summary: "A walkthrough of my Proxmox-based homelab setup — from hardware selection to VM provisioning."
 tags: [homelab, proxmox, networking]
 image: /static/images/thumbnails/homelab-from-scratch.svg
-category: homelab
 draft: false
 ---
 
-Setting up a home lab is one of the best investments you can make for learning IT and cybersecurity hands-on. Here's how I built mine.
+Setting up a homelab is one of the best investments you can make for learning IT and cybersecurity hands-on. Here's how I built mine.
 
 ## Hardware
 

@@ -4,7 +4,6 @@ date: 2025-02-13
 summary: "How to manually reduce a ZFS subvolume quota on Proxmox when pct resize fails."
 tags: [proxmox, zfs, storage]
 image: /static/images/thumbnails/reducing-zfs-pool-size.svg
-category: homelab
 draft: false
 ---
 

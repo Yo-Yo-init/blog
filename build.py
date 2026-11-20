@@ -8,8 +8,9 @@ Cloudflare then hosts dist/ as static files -- no Python server needed.
     python build.py            # build into dist/
     python build.py --serve    # build, then preview at http://localhost:8000
 
-Blog search and tag/category filters (/blog?q=..., /blog?category=...) are
-handled in the browser by static/js/filter.js, so existing links keep working.
+Tags and categories come from content/tags.yaml. Every tag gets /blog/tag/<slug>/ and every
+category /blog/category/<slug>/ as a real static page; the old /blog/?q=<tag> and
+/blog/?category=<slug> links are 301ed by src/worker.js.
 """
 
 from __future__ import annotations
@@ -39,6 +40,7 @@ from app.config import (  # noqa: E402
     TEMPLATES_DIR,
 )
 from app.content import get_docs, get_posts, refresh_content  # noqa: E402
+from app.taxonomy import TaxonomyError, get_taxonomy  # noqa: E402
 
 DIST = ROOT / "dist"
 
@@ -56,35 +58,31 @@ OG_DIR = ROOT / "static" / "images" / "og"
 OG_SITE_IMAGE = ("/static/images/og/site.png", 640, 640)   # square, for pages without a hero
 OG_POST_SIZE = (1200, 675)
 
-# Same display helpers as app/main.py, duplicated here so the build does not
-# need FastAPI installed.
-_ACRONYMS = {"dns", "vpn", "zfs", "nas", "lxc", "ssh", "vm", "nginx"}
-_SPECIAL_CASE = {"pihole": "Pi-hole"}
-
-
-def _display_tag(tag: str) -> str:
-    if tag.lower() in _SPECIAL_CASE:
-        return _SPECIAL_CASE[tag.lower()]
-    words = tag.replace("-", " ").split()
-    return " ".join(w.upper() if w.lower() in _ACRONYMS else w.capitalize() for w in words)
+# A tag page with fewer posts than this is thin content: it still exists (chips link to it)
+# but is noindex and left out of the sitemap.
+TAG_MIN_POSTS_INDEXED = 2
 
 
 def _categories_with_counts() -> list[dict]:
+    """Sidebar rows, counted from the same tags that define the categories."""
     counts: dict[str, int] = {}
     for post in get_posts():
         counts[post.category] = counts.get(post.category, 0) + 1
-    return [{**cat, "count": counts.get(cat["slug"], 0)} for cat in CATEGORIES]
+    return [{"slug": c.slug, "name": c.name, "icon": c.icon, "desc": c.desc,
+             "count": counts.get(c.slug, 0)} for c in get_taxonomy().categories]
 
 
 def _top_topics(limit: int | None = 6) -> list[dict]:
+    """Tags by post count: name = slug (URLs), display = registry display name."""
+    tax = get_taxonomy()
     counts: dict[str, int] = {}
     for post in get_posts():
         for tag in post.tags:
             counts[tag] = counts.get(tag, 0) + 1
-    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], tax.tag_name(kv[0]).lower()))
     if limit is not None:
         ranked = ranked[:limit]
-    return [{"name": t, "display": _display_tag(t), "count": n} for t, n in ranked]
+    return [{"name": t, "display": tax.tag_name(t), "count": n} for t, n in ranked]
 
 
 def _abs(path: str) -> str:
@@ -213,7 +211,7 @@ def build() -> None:
         image = _post_og_image(post)
         published = post.date.date().isoformat()
         modified = post.modified.date().isoformat()
-        cat = next((c["name"] for c in CATEGORIES if c["slug"] == post.category), None)
+        cat = post.category_name or None  # derived from the tags (content/tags.yaml)
         jsonld = {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
@@ -228,15 +226,55 @@ def build() -> None:
             "inLanguage": "en",
         }
         if post.tags:
-            jsonld["keywords"] = ", ".join(post.tags)
+            jsonld["keywords"] = ", ".join(c["name"] for c in post.tag_chips)
         if cat:
             jsonld["articleSection"] = cat
         article = {"published": published, "modified": modified, "author": author,
-                   "section": cat, "tags": list(post.tags)}
+                   "section": cat, "tags": [c["name"] for c in post.tag_chips]}
         add(path, "blog_post.html", post.modified, page_title=post.title, post=post,
             main_class="post-wide",
             seo=_seo(path, title=post.title, description=desc, og_type="article", image=image,
                      image_alt=post.title, jsonld=jsonld, article=article))
+
+    # ---- tag and category pages (real static pages; the old ?q= / ?category= links are
+    # 301ed to these by src/worker.js) --------------------------------------------------
+    tax = get_taxonomy()
+    topics_all = _top_topics(limit=None)
+    cat_rows = _categories_with_counts()
+
+    def _list_desc(lead: str, plist) -> str:
+        text = lead + ": " + "; ".join(p.title for p in plist[:3])
+        return text if len(text) <= 158 else text[:155].rsplit(" ", 1)[0] + "..."
+
+    by_tag: dict[str, list] = {}
+    for p in posts:
+        for t in p.tags:
+            by_tag.setdefault(t, []).append(p)
+    for slug in sorted(by_tag, key=lambda s: tax.tag_name(s).lower()):
+        tposts, name = by_tag[slug], tax.tag_name(slug)
+        n, path = len(tposts), f"/blog/tag/{slug}/"
+        indexable = n >= TAG_MIN_POSTS_INDEXED
+        title = f"{name} Guides and Notes"
+        add(path, "blog_list.html", max(p.modified for p in tposts), in_sitemap=indexable,
+            page_title=title, list_heading=name,
+            list_intro=f"{n} post{'s' if n != 1 else ''} tagged {name}, newest first.",
+            posts=tposts, topics=topics_all, active_tag=slug, active_category=None,
+            categories=cat_rows, main_class="with-sidebar",
+            seo=_seo(path, title=f"{title} | {SITE_NAME}", noindex=not indexable,
+                     description=_list_desc(f"{n} {SITE_NAME} post{'s' if n != 1 else ''} tagged {name}", tposts)))
+    for cat in tax.categories:
+        cposts = [p for p in posts if p.category == cat.slug]
+        if not cposts:
+            continue
+        n, path = len(cposts), f"/blog/category/{cat.slug}/"
+        title = f"{cat.name} Articles"   # distinct from the tag page title ("<Tag> Guides and Notes")
+        add(path, "blog_list.html", max(p.modified for p in cposts), page_title=title,
+            list_heading=cat.name, list_intro=f"{cat.desc}. {n} post{'s' if n != 1 else ''}, newest first.",
+            posts=cposts, topics=topics_all, active_tag=None,
+            active_category={"slug": cat.slug, "name": cat.name},
+            categories=cat_rows, main_class="with-sidebar",
+            seo=_seo(path, title=f"{title} | {SITE_NAME}",
+                     description=_list_desc(f"{n} {SITE_NAME} post{'s' if n != 1 else ''} on {cat.name.lower()}", cposts)))
 
     # /docs/ renders the first doc, so it is a duplicate: canonical points at that doc
     # and it stays out of the sitemap.
@@ -298,7 +336,7 @@ def _write_feed(posts) -> None:
     for p in posts:
         link = escape(_abs(f"/blog/{p.slug}/"))
         desc = p.summary.strip() or _plain_first_paragraph(p.content_html)
-        cats = "".join(f"<category>{escape(t)}</category>" for t in p.tags)
+        cats = "".join(f"<category>{escape(c['name'])}</category>" for c in p.tag_chips)
         items.append(
             f"    <item>\n      <title>{escape(p.title)}</title>\n      <link>{link}</link>\n"
             f'      <guid isPermaLink="true">{link}</guid>\n'
@@ -335,6 +373,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     parser.add_argument("--serve", action="store_true", help="preview dist/ locally after building")
     args = parser.parse_args()
-    build()
+    try:
+        build()
+    except TaxonomyError as e:   # a bad tag should read as a message, not a traceback
+        sys.exit(f"\nBUILD FAILED: {e}\n\nFix the tag (or add it to content/tags.yaml).")
     if args.serve:
         serve()
