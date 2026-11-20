@@ -29,8 +29,8 @@
                 <time class="post-card-date" datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
                 {% if post.tags %}
                 <div class="post-card-tags">
-                    {% for tag in post.tags %}
-                    <a href="/blog/?q={{ tag }}" class="tag">{{ tag }}</a>
+                    {% for chip in post.tag_chips %}
+                    <a href="{{ chip.url }}" class="tag">{{ chip.name }}</a>
                     {% endfor %}
                 </div>
                 {% endif %}

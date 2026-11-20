@@ -12,15 +12,12 @@ DOCS_DIR = "content/docs"
 STATIC_DIR = "static"
 TEMPLATES_DIR = "templates"
 
-# Top-level content categories (sidebar + /blog?category=<slug>). Order here is
-# display order. Only list categories that have posts; add one here when the
-# first post for it exists.
-# 'icon' refers to an id handled in templates/_icons.html.
+# Categories come from the tag registry (content/tags.yaml): one definition, no drift.
+# Each entry: slug, name, icon, desc. Posts get a category from their tags, never from
+# front matter. ('icon' refers to an id handled in templates/_icons.html.)
+from app.taxonomy import get_taxonomy  # noqa: E402
+
 CATEGORIES = [
-    {"slug": "homelab", "name": "Homelab", "icon": "server",
-     "desc": "Builds, storage, and Proxmox hosts"},
-    {"slug": "ai", "name": "AI & agents", "icon": "server",
-     "desc": "Hermes agents, model choices, and running them for real"},
-    {"slug": "networking", "name": "Networking & security", "icon": "server",
-     "desc": "DNS, VPNs, reverse proxies, and locking things down"},
+    {"slug": c.slug, "name": c.name, "icon": c.icon, "desc": c.desc}
+    for c in get_taxonomy().categories
 ]

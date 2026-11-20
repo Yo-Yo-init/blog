@@ -1,0 +1,67 @@
+# Single source of truth for the blog's taxonomy.
+#
+# * `tags` maps a URL slug to the display name shown on every chip, pill,
+#   tag page, feed item and JSON-LD block. Slugs go in post front matter and
+#   in URLs (/blog/tag/<slug>/); display names carry the correct casing.
+# * `categories` are explicit groups of tags. A post's category is DERIVED from
+#   its tags, never written by hand, so category counts and category pages
+#   cannot drift from the tags:
+#     - the category whose group matches the most of the post's tags wins;
+#     - a tie goes to the category with the higher `priority`;
+#     - every post must match at least one category (the build fails otherwise);
+#     - a tag may belong to at most one category group, or to none
+#       (`troubleshooting` is deliberately cross-cutting).
+#
+# To use a new tag: add it under `tags` (and to one category group if it
+# should steer categorisation). `python scripts/check_taxonomy.py` and the
+# build both fail when a post uses a tag that is not listed here.
+
+tags:
+  ai-agents: AI agents
+  authelia: Authelia
+  claude: Claude
+  deepinfra: DeepInfra
+  dns: DNS
+  docker: Docker
+  hermes-agent: Hermes Agent
+  homelab: Homelab
+  jellyfin: Jellyfin
+  linux: Linux
+  llm: LLM
+  llm-wiki: LLM wiki
+  nas: NAS
+  netbird: NetBird
+  networking: Networking
+  nginx: NGINX
+  obsidian: Obsidian
+  pihole: Pi-hole
+  proxmox: Proxmox
+  security: Security
+  self-hosted: Self-hosted
+  storage: Storage
+  troubleshooting: Troubleshooting
+  vpn: VPN
+  zfs: ZFS
+
+# Order here is the sidebar display order.
+categories:
+  - slug: homelab
+    name: Homelab
+    icon: server
+    priority: 1          # catch-all: loses ties
+    desc: Builds, storage, and Proxmox hosts
+    tags: [homelab, proxmox, zfs, storage, linux, docker, jellyfin, nas, self-hosted]
+
+  - slug: ai
+    name: AI & agents
+    icon: server
+    priority: 3
+    desc: Hermes agents, model choices, and running them for real
+    tags: [ai-agents, hermes-agent, llm, llm-wiki, claude, deepinfra, obsidian]
+
+  - slug: networking
+    name: Networking & security
+    icon: server
+    priority: 2
+    desc: DNS, VPNs, reverse proxies, and locking things down
+    tags: [networking, dns, vpn, netbird, pihole, nginx, authelia, security]

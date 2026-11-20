@@ -4,7 +4,6 @@ date: 2026-11-16
 summary: "How I set up an always-on team of AI agents on Proxmox that I talk to from Discord: one plans, one maintains my servers, one drafts blog posts, one coaches me for certs, and one keeps a shared wiki they all read."
 tags: [homelab, proxmox, self-hosted, ai-agents, hermes-agent, obsidian, llm-wiki]
 image: /static/images/thumbnails/self-hosted-ai-agent-team-with-hermes.svg
-category: ai
 draft: false
 ---
 

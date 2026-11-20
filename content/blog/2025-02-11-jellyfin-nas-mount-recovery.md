@@ -4,7 +4,6 @@ date: 2025-02-11
 summary: "A recovery guide for when Jellyfin loses access to media after a server freeze causes SMB/CIFS mounts to drop."
 tags: [self-hosted, jellyfin, nas, troubleshooting]
 image: /static/images/thumbnails/jellyfin-nas-mount-recovery.svg
-category: homelab
 draft: false
 ---
 

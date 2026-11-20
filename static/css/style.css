@@ -757,6 +757,12 @@ h6 {
     display: none;
 }
 
+/* Intro line under a tag/category page heading. */
+.list-intro {
+    color: var(--text-muted);
+    margin: calc(-1 * var(--space-2)) 0 var(--space-3);
+}
+
 /* ---- Tag pills: one small, neutral style everywhere ---- */
 
 .post-card-tags,

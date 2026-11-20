@@ -4,7 +4,6 @@ date: 2025-02-16
 summary: "A guide to expanding Linux VM disk partitions in Proxmox — covering growpart, ext4, XFS, and LVM."
 tags: [linux, proxmox, storage]
 image: /static/images/thumbnails/expanding-linux-vm-partitions.svg
-category: homelab
 draft: false
 ---
 

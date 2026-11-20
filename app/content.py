@@ -15,6 +15,7 @@ from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.formatters import HtmlFormatter
 
 from app.config import BLOG_DIR, DOCS_DIR
+from app.taxonomy import TaxonomyError, get_taxonomy
 
 
 # ---------------------------------------------------------------------------
@@ -66,8 +67,7 @@ class Post:
 
     def __init__(self, slug: str, title: str, date: datetime, summary: str,
                  tags: list[str], image: str, content_html: str, draft: bool = False,
-                 category: str = "homelab", updated: datetime | None = None,
-                 author: str = ""):
+                 updated: datetime | None = None, author: str = ""):
         self.slug = slug
         self.title = title
         self.date = date
@@ -76,9 +76,25 @@ class Post:
         self.image = image
         self.content_html = content_html
         self.draft = draft
-        self.category = category
         self.updated = updated      # optional `updated:` frontmatter
         self.author = author        # optional `author:` frontmatter
+
+    @property
+    def tag_chips(self) -> list[dict]:
+        """Tags as {slug, name, url}: display name for the chip, slug for the URL."""
+        tax = get_taxonomy()
+        return [{"slug": t, "name": tax.tag_name(t), "url": f"/blog/tag/{t}/"} for t in self.tags]
+
+    @property
+    def category(self) -> str:
+        """Slug of the category derived from this post's tags (see content/tags.yaml)."""
+        cat = get_taxonomy().primary_category(self.tags)
+        return cat.slug if cat else ""
+
+    @property
+    def category_name(self) -> str:
+        cat = get_taxonomy().primary_category(self.tags)
+        return cat.name if cat else ""
 
     @property
     def modified(self) -> datetime:
@@ -165,10 +181,15 @@ def load_posts() -> list[Post]:
             image=meta.get("image", ""),
             content_html=_md(post_data.content),
             draft=False,
-            category=meta.get("category", "homelab"),
             updated=_as_datetime(meta.get("updated")),
             author=str(meta.get("author", "") or ""),
         ))
+
+    # Every tag must be in content/tags.yaml and map to a category: fail the build, loudly.
+    tax = get_taxonomy()
+    problems = [msg for p in posts for msg in tax.check_post(f"content/blog/*-{p.slug}.md", p.tags)]
+    if problems:
+        raise TaxonomyError("Tag problems:\n  - " + "\n  - ".join(problems))
 
     posts.sort(key=lambda p: p.date, reverse=True)
     return posts

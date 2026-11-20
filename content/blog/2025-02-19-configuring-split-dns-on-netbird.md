@@ -1,46 +1,45 @@
 ---
-title: "Configuring Split DNS on Netbird"
+title: "Configuring Split DNS on NetBird"
 date: 2025-02-19
-summary: "A step-by-step guide to configuring Split DNS on Netbird so your local domains resolve correctly over a VPN tunnel."
+summary: "A step-by-step guide to configuring Split DNS on NetBird so your local domains resolve correctly over a VPN tunnel."
 tags: [networking, netbird, dns, vpn]
 image: /static/images/thumbnails/configuring-split-dns-on-netbird.svg
-category: networking
 draft: false
 ---
 
-Here is the refined, step-by-step guide to making your local domains work remotely over Netbird.
+Here is the refined, step-by-step guide to making your local domains work remotely over NetBird.
 
 ### **The Goal**
 
-We will configure **Split DNS**. This tells Netbird: _"When I try to access `anything.mydomain.com`, do not ask the public internet (Google). Instead, send that question through the VPN tunnel to my home Pi-hole."_
+We will configure **Split DNS**. This tells NetBird: _"When I try to access `anything.mydomain.com`, do not ask the public internet (Google). Instead, send that question through the VPN tunnel to my home Pi-hole."_
 
 ---
 
 ### **Prerequisites**
 
-1. **Netbird Admin Access:** You need access to the [Netbird Dashboard](https://app.netbird.io/).
+1. **NetBird Admin Access:** You need access to the [NetBird Dashboard](https://app.netbird.io/).
     
 2. **Local DNS Server IP:** You need the internal IP address of your Pi-hole (e.g., `192.168.1.x`).
     
-3. **Netbird Client:** The device you are connecting _from_ (e.g., your laptop or phone) must have the Netbird app installed and connected.
+3. **NetBird Client:** The device you are connecting _from_ (e.g., your laptop or phone) must have the NetBird app installed and connected.
     
 
 ---
 
 ### **Step 1: Identify your DNS Server IP**
 
-First, determine which IP address Netbird should target.
+First, determine which IP address NetBird should target.
 
-- If you have **Subnet Routes** enabled in Netbird (meaning you can already ping `192.168.1.x` addresses remotely), use your Pi-hole's **Local LAN IP** (e.g., `192.168.1.x`).
+- If you have **Subnet Routes** enabled in NetBird (meaning you can already ping `192.168.1.x` addresses remotely), use your Pi-hole's **Local LAN IP** (e.g., `192.168.1.x`).
     
-- _If you do not have subnet routes, you must install the Netbird client on your Pi-hole host and use its specific **Netbird IP** (e.g., `100.x.x.x`)._
+- _If you do not have subnet routes, you must install the NetBird client on your Pi-hole host and use its specific **NetBird IP** (e.g., `100.x.x.x`)._
     
 
 **Recommendation:** Since you can already access services via IPv4, use the **Local LAN IP**.
 
-### **Step 2: Add the Nameserver in Netbird**
+### **Step 2: Add the Nameserver in NetBird**
 
-1. Log in to the **[Netbird Admin Panel](https://app.netbird.io/)**.
+1. Log in to the **[NetBird Admin Panel](https://app.netbird.io/)**.
     
 2. Navigate to the **DNS** tab in the left sidebar.
     
@@ -77,7 +76,7 @@ Click **Save**.
 
 DNS settings can take a moment to propagate.
 
-1. On your remote device (Laptop/Phone), open the Netbird app.
+1. On your remote device (Laptop/Phone), open the NetBird app.
     
 2. **Disconnect** and **Reconnect**.
     
@@ -108,7 +107,7 @@ nslookup jellyfin.yourdomain.com
 
 **What to look for:**
 
-- **Server:** Should be the IP of your Pi-hole (or a Netbird relay address).
+- **Server:** Should be the IP of your Pi-hole (or a NetBird relay address).
     
 - **Address:** This MUST return your local LAN IP (e.g., `192.168.1.12`).
     
@@ -127,7 +126,7 @@ Once `nslookup` returns the correct local IP:
     
 3. **Success:**
     
-    - The request goes through Netbird.
+    - The request goes through NetBird.
         
     - Nginx Proxy Manager receives the **Domain Name**.
         
