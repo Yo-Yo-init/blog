@@ -4,6 +4,7 @@ date: 2025-01-15
 summary: "A walkthrough of my Proxmox-based homelab setup — from hardware selection to VM provisioning."
 tags: [homelab, proxmox, networking]
 image: /static/images/thumbnails/homelab-from-scratch.svg
+hero_alt: "Line drawing of a first server on a bare shelf, a dashed empty slot beside it for the next one, and a seedling growing at the end of the shelf."
 draft: false
 ---
 

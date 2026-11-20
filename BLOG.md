@@ -27,10 +27,12 @@ updated: 2025-03-02      # optional; drives sitemap <lastmod> and JSON-LD dateMo
 summary: "One or two sentences shown on cards and in search results."
 tags: [networking, netbird, dns, vpn]
 image: /static/images/thumbnails/configuring-split-dns-on-netbird.svg
+hero_alt: "Line drawing of a laptop whose DNS query forks to a house and a globe."  # required with image
 draft: false             # true = excluded from the build
 ---
 ```
 
+- `hero_alt` is the alt text for the hero image: one descriptive sentence of what the picture shows (not the title, never "Hero Image"). It is also used as `og:image:alt`. The build falls back to the title, but `scripts/check_content.py` fails without a real one.
 - `summary` becomes the meta description, og:description and the RSS item text, so write it as a standalone one or two sentences (aim for 160 characters or fewer).
 - `author` is optional (default: the site author) and feeds the JSON-LD author.
 - `tags` are slugs from `content/tags.yaml` (see **Tags and categories** below). There is no `category:` field any more: the category is derived from the tags.
@@ -45,6 +47,13 @@ Each post has a 16:9 SVG hero at `static/images/thumbnails/<slug>.svg` (800x450)
 - **Style:** warm paper plate (`#FAF6EF`) with the dot grid pattern, round-cap line art, stroke width 6 to 10, no text. Palette: chili red `#B5502E`, sage `#6E7F5C`, warm ink `#3B322B`, tints `#F3DACB` (red) and `#DFE6D5` (sage), tan `#CDBFAE`. The solid plate keeps it readable in dark mode.
 - **No logos or trademarks.** Evoke the thing (a jellyfish, a board, a winged messenger for Hermes) instead of copying a brand mark.
 - **Check before committing:** render the SVG with a spec-accurate renderer and look at it in light and dark. Some quick rasterisers (for example MuPDF) ignore `<pattern>` and dashed strokes and show a black background, which is a tool quirk, not a bug in the file.
+
+## Accessibility rules
+
+- **Headings:** the page template renders the title as the only H1, so a post body starts at `##` and never skips a level (`##` then `####` is an error). Do not repeat the title as `# Title` in the body. Do not wrap headings in bold (`## **Setup**`), headings are already bold.
+- **Colours:** muted text, tag chips and accent links must stay at 4.5:1 or better in both themes. Change colours only through the tokens at the top of `static/css/style.css`, and run `python scripts/check_contrast.py`.
+- **Structure:** the base template has a "Skip to content" link, labelled nav landmarks, `aria-current` on the active nav item and `aria-pressed` on the theme toggle. Heading anchors (`#`) are `aria-hidden` and not focusable; the table of contents is the keyboard route to a section.
+- `python scripts/check_content.py` and `python scripts/check_contrast.py` run in the GitHub check on every pull request.
 
 ## Tags and categories
 

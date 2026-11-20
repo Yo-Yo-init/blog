@@ -67,7 +67,7 @@ class Post:
 
     def __init__(self, slug: str, title: str, date: datetime, summary: str,
                  tags: list[str], image: str, content_html: str, draft: bool = False,
-                 updated: datetime | None = None, author: str = ""):
+                 updated: datetime | None = None, author: str = "", hero_alt: str = ""):
         self.slug = slug
         self.title = title
         self.date = date
@@ -77,6 +77,7 @@ class Post:
         self.content_html = content_html
         self.draft = draft
         self.updated = updated      # optional `updated:` frontmatter
+        self.hero_alt = hero_alt    # alt text for the hero image (required when `image:` is set)
         self.author = author        # optional `author:` frontmatter
 
     @property
@@ -183,6 +184,7 @@ def load_posts() -> list[Post]:
             draft=False,
             updated=_as_datetime(meta.get("updated")),
             author=str(meta.get("author", "") or ""),
+            hero_alt=str(meta.get("hero_alt", "") or "").strip(),
         ))
 
     # Every tag must be in content/tags.yaml and map to a category: fail the build, loudly.

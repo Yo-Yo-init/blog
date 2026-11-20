@@ -4,10 +4,11 @@ date: 2025-02-18
 summary: "A quick cheatsheet for keeping your Pi-hole healthy — status checks, updates, and backups."
 tags: [networking, pihole, dns]
 image: /static/images/thumbnails/maintaining-pihole.svg
+hero_alt: "Line drawing of a Raspberry Pi board with a heartbeat line beneath it, next to a circle containing an advertisement crossed out."
 draft: false
 ---
 
-## **Maintenance and Backup**
+## Maintenance and Backup
 
 **Health check (from SSH)**
 

@@ -5,9 +5,9 @@
 
 {% block content %}
 <article class="blog-post">
-    <div id="reading-progress"></div>
+    <div id="reading-progress" aria-hidden="true"></div>
     {% if post.image %}
-    <img src="{{ post.image }}" class="post-hero-thumbnail" alt="{{ post.title }}" />
+    <img src="{{ post.image }}" class="post-hero-thumbnail" alt="{{ post.hero_alt or post.title }}" />
     {% endif %}
     <header class="post-header">
         <h1>{{ post.title }}</h1>
@@ -25,7 +25,7 @@
         <div class="post-content prose">
             {{ post.content_html | safe }}
         </div>
-        <aside id="toc-container">
+        <aside id="toc-container" aria-label="On this page">
             <!-- ToC injected here by JS -->
         </aside>
     </div>
@@ -67,18 +67,25 @@
                 heading.id = 'h-' + index + '-' + heading.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
             }
 
-            // Add Header Anchor
+            // Read the heading text BEFORE adding the anchor, so "#" is never part of it.
+            const headingText = heading.textContent.trim();
+
+            // Header anchor: decorative for screen readers (aria-hidden, out of the tab
+            // order) so the heading is announced as its text only. The ToC links to the
+            // same ids for keyboard and screen reader users.
             const anchor = document.createElement('a');
             anchor.href = '#' + heading.id;
             anchor.className = 'header-anchor';
             anchor.textContent = '#';
+            anchor.setAttribute('aria-hidden', 'true');
+            anchor.setAttribute('tabindex', '-1');
             heading.appendChild(anchor);
 
             // Build ToC Item
             const li = document.createElement('li');
             const link = document.createElement('a');
             link.href = '#' + heading.id;
-            link.textContent = heading.textContent.replace('#', '').trim();
+            link.textContent = headingText;
             li.appendChild(link);
 
             if (heading.tagName.toLowerCase() === 'h2') {

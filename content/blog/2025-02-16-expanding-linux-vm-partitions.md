@@ -4,10 +4,10 @@ date: 2025-02-16
 summary: "A guide to expanding Linux VM disk partitions in Proxmox — covering growpart, ext4, XFS, and LVM."
 tags: [linux, proxmox, storage]
 image: /static/images/thumbnails/expanding-linux-vm-partitions.svg
+hero_alt: "Line drawing of a terminal window above a disk bar whose last partition stretches into free space with a dashed extension and an arrow."
 draft: false
 ---
 
-# Guide: Expanding Linux VM Partitions (Proxmox)
 
 This guide assumes you have already increased the disk size in the **Proxmox Web UI** and now need to reflect those changes within the Ubuntu guest OS.
 

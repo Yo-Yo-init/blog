@@ -4,6 +4,7 @@ date: 2025-02-17
 summary: "A high-level roadmap and detailed outline to help fellow enthusiasts dive into the world of homelabs while incorporating enterprise best practices."
 tags: [networking, homelab, proxmox, self-hosted]
 image: /static/images/thumbnails/homelab-blueprint.svg
+hero_alt: "Line drawing of a blueprint sheet showing a small network plan, a dimension line and a pencil lying across the corner."
 draft: false
 ---
 
