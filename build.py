@@ -33,11 +33,13 @@ sys.path.insert(0, str(ROOT))
 
 from app.config import (  # noqa: E402
     CATEGORIES,
+    COPYRIGHT_YEARS,
     SITE_AUTHOR,
     SITE_DESCRIPTION,
     SITE_NAME,
     STATIC_DIR,
     TEMPLATES_DIR,
+    YOUTUBE_URL,
 )
 from app.content import get_docs, get_posts, refresh_content  # noqa: E402
 from app.taxonomy import TaxonomyError, get_taxonomy  # noqa: E402
@@ -143,6 +145,8 @@ def _ctx(**kwargs) -> dict:
         "site_name": SITE_NAME,
         "site_description": SITE_DESCRIPTION,
         "site_author": SITE_AUTHOR,
+        "copyright_years": COPYRIGHT_YEARS,
+        "youtube_url": YOUTUBE_URL,
         "categories_all": CATEGORIES,
         **kwargs,
     }

@@ -4,6 +4,7 @@ Content pipeline — loads Markdown files, parses frontmatter, renders HTML.
 
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 from datetime import datetime
@@ -58,6 +59,10 @@ _md = mistune.create_markdown(
 )
 
 
+READING_WPM = 225      # reading speed behind the "N min read" estimate
+RELATED_COUNT = 3      # related posts shown under a post
+
+
 # ---------------------------------------------------------------------------
 # Data classes
 # ---------------------------------------------------------------------------
@@ -67,7 +72,8 @@ class Post:
 
     def __init__(self, slug: str, title: str, date: datetime, summary: str,
                  tags: list[str], image: str, content_html: str, draft: bool = False,
-                 updated: datetime | None = None, author: str = "", hero_alt: str = ""):
+                 updated: datetime | None = None, author: str = "", hero_alt: str = "",
+                 series: str = "", series_part: int | None = None):
         self.slug = slug
         self.title = title
         self.date = date
@@ -79,6 +85,14 @@ class Post:
         self.updated = updated      # optional `updated:` frontmatter
         self.hero_alt = hero_alt    # alt text for the hero image (required when `image:` is set)
         self.author = author        # optional `author:` frontmatter
+        self.series = series                # optional `series:` frontmatter (series name, e.g. "Hermes")
+        self.series_part = series_part      # optional `series_part:` to order same-day parts
+        # Filled in by _link_posts() once every post is loaded:
+        self.prev_post: Post | None = None      # the next OLDER post
+        self.next_post: Post | None = None      # the next NEWER post
+        self.related: list[Post] = []           # up to RELATED_COUNT posts sharing tags
+        self.series_posts: list[Post] = []      # every part of this post's series, in order
+        self.series_index: int = 0              # 1-based position of this post in the series
 
     @property
     def tag_chips(self) -> list[dict]:
@@ -105,6 +119,20 @@ class Post:
     @property
     def date_display(self) -> str:
         return self.date.strftime("%B %d, %Y")
+
+    @property
+    def updated_display(self) -> str:
+        """Display date for `updated:`, or "" when it is unset or not after `date`."""
+        if not self.updated or self.updated.date() <= self.date.date():
+            return ""
+        return self.updated.strftime("%B %d, %Y")
+
+    @property
+    def reading_minutes(self) -> int:
+        """Estimated reading time: words of prose (code blocks excluded) at 225 wpm, rounded up."""
+        text = re.sub(r"<pre.*?</pre>", " ", self.content_html, flags=re.S)
+        text = re.sub(r"<[^>]+>", " ", text)
+        return max(1, math.ceil(len(text.split()) / READING_WPM))
 
 
 class DocPage:
@@ -185,6 +213,8 @@ def load_posts() -> list[Post]:
             updated=_as_datetime(meta.get("updated")),
             author=str(meta.get("author", "") or ""),
             hero_alt=str(meta.get("hero_alt", "") or "").strip(),
+            series=str(meta.get("series", "") or "").strip(),
+            series_part=int(str(meta["series_part"])) if meta.get("series_part") else None,
         ))
 
     # Every tag must be in content/tags.yaml and map to a category: fail the build, loudly.
@@ -194,7 +224,37 @@ def load_posts() -> list[Post]:
         raise TaxonomyError("Tag problems:\n  - " + "\n  - ".join(problems))
 
     posts.sort(key=lambda p: p.date, reverse=True)
+    _link_posts(posts)
     return posts
+
+
+def _link_posts(posts: list[Post]) -> None:
+    """Work out previous/next, related posts and series membership (posts newest first)."""
+    # Series: parts run oldest to newest; `series_part:` breaks ties between same-day posts.
+    series: dict[str, list[Post]] = {}
+    for p in posts:
+        if p.series:
+            series.setdefault(p.series, []).append(p)
+    for parts in series.values():
+        parts.sort(key=lambda p: (p.date, p.series_part or 0, p.slug))
+        for n, p in enumerate(parts, 1):
+            p.series_posts, p.series_index = parts, n
+
+    for i, p in enumerate(posts):
+        p.next_post = posts[i - 1] if i > 0 else None
+        p.prev_post = posts[i + 1] if i + 1 < len(posts) else None
+        # Related: most shared tags first, newest first on ties. Skipped: parts of the same
+        # series (the series box links them) and the previous/next post (the pager links them).
+        mine = set(p.tags)
+        scored = []
+        for q in posts:
+            if q is p or q is p.prev_post or q is p.next_post or (p.series and q.series == p.series):
+                continue
+            shared = len(mine & set(q.tags))
+            if shared:
+                scored.append((-shared, -q.date.timestamp(), q.slug, q))
+        scored.sort(key=lambda t: t[:3])
+        p.related = [t[3] for t in scored[:RELATED_COUNT]]
 
 
 def load_docs() -> list[DocPage]:

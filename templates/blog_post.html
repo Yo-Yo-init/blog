@@ -11,7 +11,14 @@
     {% endif %}
     <header class="post-header">
         <h1>{{ post.title }}</h1>
-        <time datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
+        <p class="post-meta">
+            <span class="post-byline">By <a href="/about/" rel="author">{{ post.author or site_author }}</a></span>
+            <span class="post-meta-item">Published <time datetime="{{ post.date.date().isoformat() }}">{{ post.date_display }}</time></span>
+            {% if post.updated_display %}
+            <span class="post-meta-item">Updated <time datetime="{{ post.updated.date().isoformat() }}">{{ post.updated_display }}</time></span>
+            {% endif %}
+            <span class="post-meta-item">{{ post.reading_minutes }} min read</span>
+        </p>
         {% if post.tags %}
         <div class="post-tags">
             {% for chip in post.tag_chips %}
@@ -21,6 +28,23 @@
         {% endif %}
     </header>
 
+    {% if post.series and post.series_posts | length > 1 %}
+    <nav class="series-box" aria-label="{{ post.series }} series">
+        <p class="series-title">Part {{ post.series_index }} of the {{ post.series }} series</p>
+        <ol class="series-list">
+            {% for part in post.series_posts %}
+            <li>
+                {% if part is sameas post %}
+                <span class="series-current" aria-current="page">{{ part.title }}</span>
+                {% else %}
+                <a href="/blog/{{ part.slug }}/">{{ part.title }}</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ol>
+    </nav>
+    {% endif %}
+
     <div class="post-layout">
         <div class="post-content prose">
             {{ post.content_html | safe }}
@@ -29,6 +53,37 @@
             <!-- ToC injected here by JS -->
         </aside>
     </div>
+
+    {% if post.prev_post or post.next_post %}
+    <nav class="post-pager" aria-label="Previous and next posts">
+        {% if post.prev_post %}
+        <a href="/blog/{{ post.prev_post.slug }}/" class="pager-link pager-prev" rel="prev">
+            <span class="pager-label">&larr; Previous post</span>
+            <span class="pager-title">{{ post.prev_post.title }}</span>
+        </a>
+        {% endif %}
+        {% if post.next_post %}
+        <a href="/blog/{{ post.next_post.slug }}/" class="pager-link pager-next" rel="next">
+            <span class="pager-label">Next post &rarr;</span>
+            <span class="pager-title">{{ post.next_post.title }}</span>
+        </a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% if post.related %}
+    <section class="related-posts" aria-labelledby="related-heading">
+        <h2 class="related-heading" id="related-heading">Related posts</h2>
+        <ul class="related-list">
+            {% for rel in post.related %}
+            <li class="related-item">
+                <a href="/blog/{{ rel.slug }}/" class="related-title">{{ rel.title }}</a>
+                <span class="related-meta">{{ rel.date_display }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
 
     <footer class="post-footer">
         <a href="/blog/">&larr; Back to all posts</a>

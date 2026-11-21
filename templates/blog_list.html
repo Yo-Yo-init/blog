@@ -8,6 +8,24 @@
             <p class="list-intro">{{ list_intro }}</p>
             {% endif %}
 
+            {# Active tag or category: say so and offer a way back to the full list. #}
+            {% set active_tag_name = (topics | selectattr("name", "equalto", active_tag) | map(attribute="display") | first) if active_tag and topics else "" %}
+            {% if active_tag_name or active_category %}
+            {% set active_name = active_tag_name or active_category.name %}
+            <p class="active-filter">
+                <span class="active-filter-label">Showing {{ "tag" if active_tag_name else "category" }}: <strong>{{ active_name }}</strong></span>
+                <a href="/blog/" class="clear-filter" aria-label="Clear the {{ active_name }} filter and show all posts"><span aria-hidden="true">&times;</span> Clear</a>
+            </p>
+            {% endif %}
+
+            <form id="blog-search" class="blog-search" role="search" method="get" action="/blog/">
+                <label for="blog-search-input" class="visually-hidden">Search posts</label>
+                <input id="blog-search-input" class="blog-search-input" type="search" name="q"
+                       placeholder="Search posts" autocomplete="off" value="{{ search_query or '' }}" />
+                <button type="submit" class="blog-search-button">Search</button>
+            </form>
+            <p id="blog-search-status" class="visually-hidden" role="status" aria-live="polite"></p>
+
             {% if topics %}
             <div class="filter-bar">
                 <a href="/blog/" class="filter-pill {% if not active_tag and not active_category %}active{% endif %}">All</a>
@@ -18,33 +36,42 @@
             </div>
             {% endif %}
 
-            {% for post in posts %}
-            <article class="post-card">
-                {% if post.image %}
-                <img src="{{ post.image }}" class="post-card-thumbnail" alt="" loading="lazy" />
-                {% endif %}
-                <div class="post-card-meta">
-                    <time class="post-card-date" datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
-                    {% if post.tags %}
-                    <div class="post-card-tags">
-                        {% for chip in post.tag_chips %}
-                        <a href="{{ chip.url }}" class="tag">{{ chip.name }}</a>
-                        {% endfor %}
-                    </div>
+            {# Posts grouped by year, newest year first (posts arrive newest first). #}
+            {% for year in (posts | groupby("date.year") | reverse) %}
+            <section class="year-group" aria-labelledby="year-{{ year.grouper }}">
+                <h2 class="year-heading" id="year-{{ year.grouper }}">{{ year.grouper }}</h2>
+                {% for post in year.list %}
+                <article class="post-card" data-search="{{ (post.title ~ ' ' ~ post.summary ~ ' ' ~ (post.tag_chips | map(attribute='name') | join(' ')) ~ ' ' ~ (post.tags | join(' '))) | lower }}">
+                    {% if post.image %}
+                    <img src="{{ post.image }}" class="post-card-thumbnail" alt="" loading="lazy" />
                     {% endif %}
-                </div>
-                <h2 class="post-card-title"><a href="/blog/{{ post.slug }}/" class="post-card-link">{{ post.title }}</a></h2>
-                {% if post.summary %}
-                <p class="post-card-summary">{{ post.summary }}</p>
-                {% endif %}
-            </article>
+                    <div class="post-card-meta">
+                        <time class="post-card-date" datetime="{{ post.date.isoformat() }}">{{ post.date_display }}</time>
+                        {% if post.tags %}
+                        <div class="post-card-tags">
+                            {% for chip in post.tag_chips %}
+                            <a href="{{ chip.url }}" class="tag">{{ chip.name }}</a>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h3 class="post-card-title"><a href="/blog/{{ post.slug }}/" class="post-card-link">{{ post.title }}</a></h3>
+                    {% if post.summary %}
+                    <p class="post-card-summary">{{ post.summary }}</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </section>
             {% endfor %}
 
             {% if not posts %}
             <p class="empty-state">No posts yet.</p>
             {% endif %}
+            <p id="blog-search-empty" class="empty-state" hidden>No posts match your search. Try fewer words, or pick a tag above.</p>
         </section>
 </div>
 
 {% include "_categories_sidebar.html" %}
+
+<script src="/static/js/blog-search.js"></script>
 {% endblock %}
