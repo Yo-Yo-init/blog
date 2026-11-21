@@ -34,7 +34,10 @@ draft: false             # true = excluded from the build
 
 - `hero_alt` is the alt text for the hero image: one descriptive sentence of what the picture shows (not the title, never "Hero Image"). It is also used as `og:image:alt`. The build falls back to the title, but `scripts/check_content.py` fails without a real one.
 - `summary` becomes the meta description, og:description and the RSS item text, so write it as a standalone one or two sentences (aim for 160 characters or fewer).
-- `author` is optional (default: the site author) and feeds the JSON-LD author.
+- `author` is optional (default: the site author) and feeds the JSON-LD author and the "By ..." byline on the post page.
+- `series` is optional: the series name, spelled the same in every part (`series: Hermes`). Posts sharing a name get a "Part N of the Hermes series" box that links every part. Parts are ordered by `date`; `series_part: 2` (optional) orders parts published on the same day. A series needs at least two posts (`scripts/check_content.py` checks).
+- `updated` (optional) adds an "Updated <date>" item to the post byline when it is later than `date`.
+- Post pages also show an estimated reading time (words outside code blocks at 225 wpm, rounded up), previous/next links by date and up to three related posts (most shared tags, newest first, series siblings and the previous/next post left out). All of that is computed by the build; nothing to write by hand.
 - `tags` are slugs from `content/tags.yaml` (see **Tags and categories** below). There is no `category:` field any more: the category is derived from the tags.
 - Start the body with a short intro paragraph, then `##` / `###` headings (they build the table of contents).
 - Code blocks need a language (` ```bash `, ` ```yaml `) for syntax highlighting.

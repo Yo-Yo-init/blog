@@ -45,7 +45,7 @@
 {% endif %}
 
     <!-- Styles (system font stack — no external font requests) -->
-    <link rel="stylesheet" href="/static/css/style.css?v=11" />
+    <link rel="stylesheet" href="/static/css/style.css?v=12" />
 
     <!-- Inline script to prevent flash of wrong theme -->
     <script>
@@ -53,6 +53,7 @@
             var t = localStorage.getItem("theme");
             if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
             document.documentElement.setAttribute("data-theme", t);
+            document.documentElement.classList.add("js");
         })();
     </script>
 </head>
@@ -67,10 +68,16 @@
             </a>
 
             <nav class="site-nav" aria-label="Main">
-                <a href="/" class="nav-home">Home</a>
-                <a href="/blog/">Blog</a>
-                <a href="/docs/">Docs</a>
-                <a href="/about/">About</a>
+                <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+                    <span class="nav-toggle-icon" aria-hidden="true"></span>
+                    <span class="nav-toggle-label">Menu</span>
+                </button>
+                <div id="nav-links" class="nav-links">
+                    <a href="/" class="nav-home">Home</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="/docs/">Docs</a>
+                    <a href="/about/">About</a>
+                </div>
                 <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
                     <span class="theme-icon"></span>
                 </button>
@@ -84,17 +91,18 @@
 
     <footer class="site-footer">
         <div class="footer-inner">
-            <p class="footer-copy">&copy; {{ site_name }}</p>
+            <p class="footer-copy">&copy; {{ copyright_years }} {{ site_name }}</p>
             <nav class="footer-links" aria-label="Footer">
                 <a href="/feed.xml">RSS</a>
                 <a href="https://github.com/Yo-Yo-init" target="_blank" rel="noopener">GitHub</a>
                 <a href="https://www.linkedin.com/in/dominic-pepper/" target="_blank" rel="noopener">LinkedIn</a>
-                <a href="https://www.youtube.com/watch?v=3BFTio5296w" target="_blank" rel="noopener">YouTube</a>
+                <a href="{{ youtube_url }}" target="_blank" rel="noopener">YouTube</a>
             </nav>
         </div>
     </footer>
 
     <script src="/static/js/theme.js"></script>
+    <script src="/static/js/nav.js"></script>
     <script>
         // Highlight the nav item for the current page.
         (function () {

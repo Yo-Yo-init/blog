@@ -23,6 +23,8 @@ from app.config import (
     STATIC_DIR,
     TEMPLATES_DIR,
     CATEGORIES,
+    COPYRIGHT_YEARS,
+    YOUTUBE_URL,
 )
 from app.content import refresh_content, get_posts, get_docs
 
@@ -82,6 +84,8 @@ def _ctx(request: Request, **kwargs) -> dict:
         "site_name": SITE_NAME,
         "site_description": SITE_DESCRIPTION,
         "site_author": SITE_AUTHOR,
+        "copyright_years": COPYRIGHT_YEARS,
+        "youtube_url": YOUTUBE_URL,
         "categories_all": CATEGORIES,
         **kwargs,
     }

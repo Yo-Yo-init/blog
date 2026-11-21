@@ -302,12 +302,61 @@ h6 {
     content: "☽";
 }
 
-/* ---- Mobile header ---- */
-@media (max-width: 640px) {
+/* The links sit in their own wrapper so the phone layout can turn them into a menu. */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+/* Menu button: only exists on phones, and only when JavaScript can drive it. */
+.nav-toggle {
+    display: none;
+    align-items: center;
+    gap: var(--space-1);
+    height: 40px;
+    padding: 0 var(--space-2);
+    background: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-toggle:hover {
+    background: var(--bg-secondary);
+}
+
+/* Three bars, drawn with a shadow so there is no extra markup or image. */
+.nav-toggle-icon {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+    box-shadow: 0 -5px 0 currentColor, 0 5px 0 currentColor;
+}
+
+/* ---- Mobile header (600px and below) ----
+   The "Chili Lab" name stays visible as the home link. The links collapse into a
+   dropdown opened by the Menu button (aria-expanded / aria-controls, Escape closes). */
+@media (max-width: 600px) {
     .header-inner {
-        gap: 0.75rem;
-        /* Match .site-main's side padding so edges stay aligned on phones. */
-        padding: 0 var(--space-3);
+        gap: var(--space-1);
+        padding: 0 var(--space-2);
+    }
+
+    .site-logo {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+
+    .site-nav {
+        gap: var(--space-1);
     }
 
     .site-nav a {
@@ -315,8 +364,48 @@ h6 {
         font-weight: 600;
     }
 
-    .site-nav {
-        gap: 0.75rem;
+    /* With JavaScript: Menu button + dropdown panel under the header. */
+    .js .nav-toggle {
+        display: inline-flex;
+    }
+
+    .js .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: var(--space-1) var(--space-2) var(--space-2);
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .js .nav-links.is-open {
+        display: flex;
+    }
+
+    .js .nav-links a {
+        font-size: 1rem;
+        padding: var(--space-2) var(--space-1);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .js .nav-links a:last-child {
+        border-bottom: 0;
+    }
+
+    /* Without JavaScript there is no menu: keep the links in the header, drop the
+       secondary Home link (the logo is the home link). */
+    html:not(.js) .site-logo-text {
+        display: none;
+    }
+
+    html:not(.js) .nav-home {
+        display: none;
     }
 }
 
@@ -678,6 +767,104 @@ h6 {
     margin-bottom: var(--space-3);
 }
 
+/* Search box (shown only when JavaScript can filter the list). */
+.blog-search {
+    display: none;
+    gap: var(--space-1);
+    margin-bottom: var(--space-2);
+}
+
+.js .blog-search {
+    display: flex;
+}
+
+.blog-search-input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 var(--space-2);
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease;
+}
+
+.blog-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.blog-search-input:hover {
+    border-color: var(--text-muted);
+}
+
+.blog-search-button {
+    height: 40px;
+    padding: 0 var(--space-2);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.blog-search-button:hover {
+    border-color: var(--text-muted);
+}
+
+/* "Showing tag: X  x Clear" on tag and category pages. */
+.active-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.active-filter strong {
+    color: var(--accent);
+}
+
+.clear-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-05);
+    padding: var(--space-05) var(--space-1);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.clear-filter:hover {
+    background: var(--bg-secondary);
+    border-color: var(--text-muted);
+    text-decoration: none;
+}
+
+/* Year groups on the post list. */
+.year-heading {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: var(--space-4) 0 var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border);
+}
+
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
@@ -920,11 +1107,166 @@ h4:hover .header-anchor {
     max-width: var(--max-width);
 }
 
-.post-header time {
-    display: block;
+/* Byline row: By Pepper, published, updated, reading time. */
+.post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-05) var(--space-3);
     font-size: 0.85rem;
     color: var(--text-muted);
     margin-bottom: var(--space-2);
+}
+
+.post-meta a {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.post-meta a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Series box: "Part N of the X series" with every part linked. */
+.series-box {
+    max-width: var(--max-width);
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+}
+
+.series-title {
+    margin: 0 0 var(--space-1);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+.series-list {
+    margin: 0;
+    padding-left: var(--space-3);
+    font-size: 0.92rem;
+}
+
+.series-list li {
+    margin: var(--space-05) 0;
+}
+
+.series-current {
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* Previous / next post. */
+.post-pager {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    max-width: var(--max-width);
+    margin-top: var(--space-6);
+}
+
+.pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-05);
+    padding: var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pager-link:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-secondary);
+    text-decoration: none;
+}
+
+.pager-prev {
+    grid-column: 1;
+}
+
+.pager-next {
+    grid-column: 2;
+    text-align: right;
+}
+
+.pager-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.pager-title {
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+/* Related posts (shared tags). */
+.related-posts {
+    max-width: var(--max-width);
+    margin-top: var(--space-5);
+}
+
+.related-heading {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+}
+
+.related-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.related-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-1) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.related-item:last-child {
+    border-bottom: 0;
+}
+
+.related-title {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.related-title:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.related-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+    .post-pager {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pager-prev,
+    .pager-next {
+        grid-column: 1;
+        text-align: left;
+    }
 }
 
 .post-footer {
@@ -1105,6 +1447,23 @@ h4:hover .header-anchor {
    Utility
    ================================================================== */
 
+/* The hidden attribute must win over component display rules (search filter, menu). */
+[hidden] {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .empty-state {
     color: var(--text-muted);
     padding: 2rem 0;
@@ -1122,7 +1481,7 @@ h4:hover .header-anchor {
 [data-theme="light"] pre code .cm,
 [data-theme="light"] pre code .c1,
 [data-theme="light"] pre code .cs {
-    color: #6a737d;
+    color: #5c6570;   /* 5.4:1 on the code background (was #6a737d, 4.45:1) */
     font-style: italic;
 }
 
@@ -1131,7 +1490,7 @@ h4:hover .header-anchor {
 [data-theme="light"] pre code .kn,
 [data-theme="light"] pre code .kd,
 [data-theme="light"] pre code .kc {
-    color: #d73a49;
+    color: #cb2431;   /* about 5:1 on the code background (was #d73a49, 4.23:1) */
 }
 
 /* Keywords */
@@ -1168,7 +1527,7 @@ h4:hover .header-anchor {
 /* Module names */
 [data-theme="light"] pre code .o,
 [data-theme="light"] pre code .ow {
-    color: #d73a49;
+    color: #cb2431;
 }
 
 /* Operators */
@@ -1178,7 +1537,7 @@ h4:hover .header-anchor {
 [data-theme="dark"] pre code .cm,
 [data-theme="dark"] pre code .c1,
 [data-theme="dark"] pre code .cs {
-    color: #6a737d;
+    color: #8b949e;   /* 5.9:1 on the code background (was #6a737d, 3.38:1) */
     font-style: italic;
 }
 
@@ -1236,16 +1595,4 @@ h4:hover .header-anchor {
     overflow-wrap: anywhere;
 }
 
-@media (max-width: 640px) {
-    .site-logo-text {
-        display: none;
-    }
 
-    .site-nav .nav-home {
-        display: none;
-    }
-
-    .site-nav {
-        gap: 0.85rem;
-    }
-}
