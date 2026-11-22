@@ -1,8 +1,8 @@
 # Site-wide configuration
 
 SITE_NAME = "Chili Lab"
-SITE_DESCRIPTION = ("Homelab, networking and self-hosted AI agent guides: Proxmox, Pi-hole, Authelia, "
-                    "Nginx Proxy Manager and Hermes Agent, with real configs and fixes.")
+SITE_DESCRIPTION = ("Homelab, networking, security and self-hosted AI agent guides: Proxmox, Pi-hole, "
+                    "Authelia, Nginx Proxy Manager and Hermes Agent, with real configs and fixes.")
 SITE_AUTHOR = "Pepper"
 
 # Footer copyright range: first year the site published, to the year of the build.
@@ -14,8 +14,7 @@ COPYRIGHT_YEARS = (f"{SITE_START_YEAR}\u2013{_this_year}" if _this_year > SITE_S
                    else str(SITE_START_YEAR))
 
 # Social links shown in the footer and on /about/.
-# TODO: YOUTUBE_URL still points at a single video (the old footer link). Replace it with the
-# channel URL (https://www.youtube.com/@<handle>) once it is known; nothing else needs to change.
+# Deliberate Easter egg: YOUTUBE_URL must stay a single video, not a channel link.
 YOUTUBE_URL = "https://www.youtube.com/watch?v=3BFTio5296w"
 
 # Paths (relative to project root)

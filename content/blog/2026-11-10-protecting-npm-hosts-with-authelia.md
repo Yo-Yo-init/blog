@@ -8,7 +8,7 @@ hero_alt: "Line drawing of a browser request reaching an arched gate with a keyh
 draft: false
 ---
 
-I run [Nginx Proxy Manager](https://nginxproxymanager.com/) (NPM) as the front door for most of my self-hosted services, and I want a single login gate in front of all of them. That's what [Authelia](https://www.authelia.com/) gives me: an authentication middleware that sits between the internet and things like Sonarr, Portainer, or Nextcloud. Before anyone reaches a protected app, they have to pass Authelia first.
+I run [Nginx Proxy Manager](https://nginxproxymanager.com/) (NPM) as the front door for most of my self-hosted services, and I want a single login gate in front of all of them. That's what [Authelia](https://www.authelia.com/) gives me: an authentication middleware that sits between the internet and things like Portainer or Nextcloud. Before anyone reaches a protected app, they have to pass Authelia first.
 
 I wrote earlier about setting up Authelia itself — generating secrets, the users database, `configuration.yml`. This post is the other half: the **NPM side**. How to mount a small folder of reusable nginx "snippets" into NPM, and how to protect any proxy host by pasting one short block into its Advanced tab. Once the snippets are in place, protecting a new service takes about two minutes.
 
@@ -150,7 +150,7 @@ proxy_set_header Connection "upgrade";
 
 ## 5. Protect a host in the NPM UI
 
-Now the payoff. To protect a service (Nextcloud, Sonarr, Portainer — anything):
+Now the payoff. To protect a service (Nextcloud, Portainer — anything):
 
 1. Log in to the NPM web UI.
 2. Edit the **Proxy Host** you want to protect.
@@ -179,7 +179,7 @@ location / {
 
 5. Click **Save**.
 
-One critical detail: NPM does *not* automatically forward to whatever you typed in the host form once you define your own `location /` block — you must repeat the destination yourself in the `proxy_pass` line, using the real internal IP and port of your service (e.g. `http://192.168.1.10:8989` for Sonarr).
+One critical detail: NPM does *not* automatically forward to whatever you typed in the host form once you define your own `location /` block — you must repeat the destination yourself in the `proxy_pass` line, using the real internal IP and port of your service (e.g. `http://192.168.1.10:9000` for Portainer).
 
 Repeat the paste for each host you want behind the login wall. Hosts without the block stay unprotected, and the Authelia login portal host itself must be left unprotected (nothing in its Advanced tab), or you'll get a redirect loop.
 

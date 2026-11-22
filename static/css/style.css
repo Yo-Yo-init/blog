@@ -620,6 +620,15 @@ h6 {
     margin: 0;
 }
 
+/* Visible placeholder for details still to be filled in (text/bg-secondary is checked in CI). */
+mark.todo {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px dashed var(--accent);
+    border-radius: 4px;
+    padding: 0 0.35em;
+}
+
 .about-social {
     display: flex;
     flex-wrap: wrap;

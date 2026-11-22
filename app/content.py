@@ -59,6 +59,27 @@ _md = mistune.create_markdown(
 )
 
 
+_TASK_ITEM = re.compile(
+    r'(<li class="task-list-item">)<input class="task-list-item-checkbox" type="checkbox"((?: disabled| checked)*)\s*/?>(.*?)</li>',
+    re.S)
+
+
+def _label_task_checkboxes(html: str) -> str:
+    """Give every rendered `- [ ]` checkbox an accessible name (its own item text); a bare
+    <input type=checkbox> with no label fails WCAG 4.1.2 and Lighthouse's `label` audit."""
+    def fix(m: re.Match) -> str:
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", m.group(3))).strip()
+        label = (text[:117] + "...") if len(text) > 120 else text
+        label = label.replace("&", "&amp;").replace('"', "&quot;") if "&amp;" not in label else label.replace('"', "&quot;")
+        return (f'{m.group(1)}<input class="task-list-item-checkbox" type="checkbox"{m.group(2)} '
+                f'aria-label="{label or "Checklist item"}" />{m.group(3)}</li>')
+    return _TASK_ITEM.sub(fix, html)
+
+
+def render_markdown(text: str) -> str:
+    return _label_task_checkboxes(_md(text))
+
+
 READING_WPM = 225      # reading speed behind the "N min read" estimate
 RELATED_COUNT = 3      # related posts shown under a post
 
@@ -160,7 +181,7 @@ def _slug_from_filename(filename: str) -> str:
     """Derive a URL slug from a markdown filename.
 
     '2025-01-15-hello-world.md' -> 'hello-world'
-    'getting-started.md'        -> 'getting-started'
+    'lab-overview.md'           -> 'lab-overview'
     """
     name = Path(filename).stem
     # Strip leading date pattern (YYYY-MM-DD-)
@@ -208,7 +229,7 @@ def load_posts() -> list[Post]:
             summary=meta.get("summary", ""),
             tags=meta.get("tags", []),
             image=meta.get("image", ""),
-            content_html=_md(post_data.content),
+            content_html=render_markdown(post_data.content),
             draft=False,
             updated=_as_datetime(meta.get("updated")),
             author=str(meta.get("author", "") or ""),
@@ -273,7 +294,7 @@ def load_docs() -> list[DocPage]:
             slug=_slug_from_filename(filepath.name),
             title=meta.get("title", filepath.stem),
             order=meta.get("order", 99),
-            content_html=_md(doc_data.content),
+            content_html=render_markdown(doc_data.content),
             modified=_as_datetime(meta.get("updated")) or _as_datetime(meta.get("date")),
         ))
 

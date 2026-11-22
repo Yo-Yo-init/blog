@@ -91,7 +91,7 @@ blog/
 │   ├── blog/
 │   │   └── YYYY-MM-DD-slug.md
 │   └── docs/
-│       └── getting-started.md
+│       └── lab-overview.md
 │
 ├── static/
 │   ├── css/
