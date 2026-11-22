@@ -200,7 +200,7 @@ def build() -> None:
     add("/about/", "about.html", None, page_title="About Pepper",
         seo=_seo("/about/", title=f"About Pepper | {SITE_NAME}",
                  description=f"About {SITE_NAME} and its author Pepper, an IT technician who "
-                             "documents homelab, networking and self-hosted AI projects."))
+                             "documents homelab, networking, security and self-hosted AI projects."))
     add("/blog/", "blog_list.html", newest, page_title=blog_title, posts=posts, search_query="",
         topics=_top_topics(limit=None), active_category=None,
         categories=_categories_with_counts(), main_class="with-sidebar",
@@ -363,6 +363,8 @@ def _write_feed(posts) -> None:
 def _write_redirects(pages: list[str]) -> None:
     """dist/_redirects (Cloudflare static assets): 301 the bare /path form to /path/."""
     rules = [f"{p.rstrip('/')} {p} 301" for p in pages if p != "/" and p.endswith("/")]
+    # The old how-to-write-posts doc moved into README.md; send its URLs to the docs index.
+    rules += ["/docs/getting-started /docs/ 301", "/docs/getting-started/ /docs/ 301"]
     (DIST / "_redirects").write_text("\n".join(rules) + "\n", encoding="utf-8")
 
 

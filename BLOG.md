@@ -79,8 +79,8 @@ Every page gets a canonical link, Open Graph and Twitter tags; posts also get `o
 
 ```yaml
 ---
-title: "Getting Started"
-order: 1
+title: "Network and DNS"
+order: 2
 ---
 ```
 

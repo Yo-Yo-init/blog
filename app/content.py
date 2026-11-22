@@ -160,7 +160,7 @@ def _slug_from_filename(filename: str) -> str:
     """Derive a URL slug from a markdown filename.
 
     '2025-01-15-hello-world.md' -> 'hello-world'
-    'getting-started.md'        -> 'getting-started'
+    'lab-overview.md'           -> 'lab-overview'
     """
     name = Path(filename).stem
     # Strip leading date pattern (YYYY-MM-DD-)

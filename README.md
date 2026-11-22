@@ -19,7 +19,42 @@ uvicorn app.main:app --reload
 
 ## Writing
 
-Add Markdown files to `content/blog/` (posts) or `content/docs/` (docs). Front matter, folders and publishing rules are in [BLOG.md](BLOG.md).
+Content is Markdown with YAML front matter. Drop a `.md` file into the right folder and the build picks it up:
+
+```
+content/
+├── blog/       date-prefixed posts (2025-01-15-my-post.md)
+└── docs/       lab reference pages (lab-overview.md)
+```
+
+Front matter, folders, tags and publishing rules are in [BLOG.md](BLOG.md). The short version:
+
+### Writing a blog post
+
+Create `content/blog/YYYY-MM-DD-slug.md` with this front matter:
+
+```yaml
+---
+title: "Your Post Title"
+date: 2025-02-14
+summary: "A short description for the blog list."
+tags: [homelab, proxmox]
+draft: false
+---
+```
+
+Tags must exist in `content/tags.yaml`. Set `draft: true` to hide a post while you are still working on it.
+
+### Writing a doc page
+
+Doc pages are public reference notes about the lab and live in `content/docs/`. They must not contain internal IPs, real hostnames or domains, or credentials. The `order` field controls sidebar sorting (lower numbers first):
+
+```yaml
+---
+title: "Page Title"
+order: 1
+---
+```
 
 ## Deployment
 
