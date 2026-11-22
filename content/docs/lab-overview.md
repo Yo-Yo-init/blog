@@ -20,7 +20,7 @@ This is the map of my homelab: what runs where, and which page to read for the d
 - **Remote access:** NetBird, with split DNS so my internal names resolve away from home. Same page.
 - **Front door:** Nginx Proxy Manager, with Authelia as the login gate. See [Reverse proxy and auth](/docs/reverse-proxy-and-auth/).
 - **Dashboard and monitoring:** a Homepage dashboard, plus Uptime Kuma and Dozzle for status and logs.
-- **Media and downloads:** Jellyfin, Seerr, the Arr apps and a Usenet downloader.
+- **Media:** Jellyfin.
 - **Misc tools:** Mealie, n8n and Stirling PDF.
 
 ## How I run changes
